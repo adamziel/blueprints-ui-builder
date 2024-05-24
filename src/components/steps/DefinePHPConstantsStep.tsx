@@ -1,10 +1,8 @@
-import React from 'react';
-import { StepProps } from '../types';
-import StepInputText from './forms/StepInputText';
+import React from "react";
+import { StepProps } from "../../types";
+import StepInputText from "../forms/StepInputText";
 
-const ActivatePluginStep: React.FC<StepProps> = ({
-  stepIndex: index,
-}) => {
+const ActivatePluginStep: React.FC<StepProps> = ({ stepIndex: index }) => {
   return (
     <div className="step">
       <h4>Define a PHP constant</h4>

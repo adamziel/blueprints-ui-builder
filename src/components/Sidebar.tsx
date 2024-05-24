@@ -1,9 +1,9 @@
-import React from 'react';
-import { useDrag } from 'react-dnd';
-import { StepMeta } from '../context/StepsContext';
+import React from "react";
+import { useDrag } from "react-dnd";
+import { StepMeta } from "../context/StepsContext";
 
 const ItemTypes = {
-  CARD: 'card',
+  CARD: "card",
 };
 
 interface SidebarProps {
@@ -22,7 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({ availableSteps }) => {
 };
 
 interface StepCardProps {
-    stepMeta: StepMeta;
+  stepMeta: StepMeta;
 }
 
 const StepCard: React.FC<StepCardProps> = ({ stepMeta }) => {
@@ -35,7 +35,11 @@ const StepCard: React.FC<StepCardProps> = ({ stepMeta }) => {
   });
 
   return (
-    <div ref={drag} className="step-card" style={{ opacity: isDragging ? 0.5 : 1 }}>
+    <div
+      ref={drag}
+      className="step-card"
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+    >
       {stepMeta.label}
     </div>
   );

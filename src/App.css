@@ -4,51 +4,68 @@
 
 .steps-container {
   display: flex;
-}
 
-.sidebar {
-  width: 200px;
-  padding: 10px;
-  background-color: #f1f1f1;
-  border-right: 1px solid #ccc;
-}
+  .sidebar {
+    width: 200px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-right: 1px solid #ccc;
 
-.step-card {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin-bottom: 10px;
-  cursor: grab;
-}
+    .step-card {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+      cursor: grab;
+    }
+  }
 
-.steps-list {
-  flex: 1;
-  padding: 10px;
+  .steps-list {
+    flex: 1;
+    padding: 10px;
+  }
 }
 
 .step-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-start;
   border: 1px solid #ccc;
   padding: 10px;
   margin: 10px;
   background-color: #f9f9f9;
   cursor: move;
-  transition: transform 0.2s, opacity 0.2s;
+  transition:
+    transform 0.2s,
+    opacity 0.2s;
+
+  .step {
+    flex-grow: 1;
+  }
+
+  .step-delete {
+    background: #f00;
+    cursor: pointer;
+    border: 0;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px;
+  }
 }
 
-.step-wrapper h4 {
-  margin: 0 0 10px 0;
+.step {
+  h4 {
+    margin: 0 0 10px 0;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
 }
 
-.step-wrapper label {
-  display: block;
-  margin-bottom: 10px;
-}
-
-button {
-  margin-top: 10px;
-}
-
-.placeholder {
+.drag-placeholder {
   border: 2px dashed #ccc;
   background-color: #e9e9e9;
   margin: 2px;
