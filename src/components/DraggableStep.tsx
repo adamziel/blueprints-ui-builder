@@ -5,8 +5,8 @@ import { DragItemTypes } from "../types";
 import Step from "./Step";
 import { boxImage } from "./boximage";
 import { DraggedItem } from "./StepsList";
-import { useDispatch } from "../context/actions";
-import { StepModel } from "../context/StepsContext";
+import { setPlaceholderIndex, StepModel } from "../context/steps";
+import { useDispatch } from "react-redux";
 
 interface DraggableStepProps {
   index: number;
@@ -16,7 +16,7 @@ interface DraggableStepProps {
 const DraggableStep: React.FC<DraggableStepProps> = (props) => {
   const { index, step } = props;
   const ref = useRef<HTMLDivElement>(null);
-  const { setPlaceholderIndex } = useDispatch();
+  const dispatch = useDispatch();
 
   const [{ isDragging }, drag, preview] = useDrag({
     type: DragItemTypes.STEP,
@@ -33,7 +33,7 @@ const DraggableStep: React.FC<DraggableStepProps> = (props) => {
         return;
       }
       if (item.index === props.index) {
-        setPlaceholderIndex(null);
+        dispatch(setPlaceholderIndex(null));
         return;
       }
       const hoverBoundingRect = ref.current.getBoundingClientRect();
@@ -44,11 +44,11 @@ const DraggableStep: React.FC<DraggableStepProps> = (props) => {
       const targetIndex = hoverClientY < hoverMiddleY ? index : index + 1;
 
       if (item.index === props.index - 1 && targetIndex === props.index) {
-        setPlaceholderIndex(null);
+        dispatch(setPlaceholderIndex(null));
         return;
       }
 
-      setPlaceholderIndex(targetIndex);
+      dispatch(setPlaceholderIndex(targetIndex));
     },
   });
 

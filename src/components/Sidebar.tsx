@@ -1,6 +1,6 @@
 import React from "react";
 import { useDrag } from "react-dnd";
-import { StepMeta } from "../context/StepsContext";
+import { StepMeta } from "../context/steps";
 
 const ItemTypes = {
   CARD: "card",

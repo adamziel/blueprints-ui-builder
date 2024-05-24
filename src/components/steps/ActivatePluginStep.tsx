@@ -2,7 +2,7 @@ import React from "react";
 import { StepProps } from "../../types";
 import StepInputText from "../forms/StepInputText";
 import StepCheckbox from "../forms/StepCheckbox";
-import { StepsMeta } from "../../context/StepsContext";
+import { StepsMeta } from "../../context/steps";
 
 const ActivatePluginStep: React.FC<StepProps> = ({ stepIndex: index }) => {
   return (

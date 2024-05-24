@@ -1,12 +1,15 @@
 import React from "react";
-import { useDispatch } from "../../context/actions";
-import { useAppState } from "../../context/StepsContext";
+import { updateStepAttribute } from "../../context/steps";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../context/store";
 
-const StepInputText: React.FC<any> = ({ name, index, ...rest }) => {
-  const { steps } = useAppState();
-  const actions = useDispatch();
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    actions.updateStepAttribute(index, e.target.name, e.target.value);
+const StepCheckbox: React.FC<any> = ({ name, index, ...rest }) => {
+  const steps = useSelector((state: RootState) => state.steps.steps);
+  const dispatch = useDispatch();
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(
+      updateStepAttribute({ index, key: name, value: e.target.value }),
+    );
   };
 
   const step = steps[index];
@@ -15,10 +18,10 @@ const StepInputText: React.FC<any> = ({ name, index, ...rest }) => {
       name={name}
       type="text"
       value={step[name] || ""}
-      onChange={handleInputChange}
+      onChange={handleCheckboxChange}
       {...rest}
     />
   );
 };
 
-export default StepInputText;
+export default StepCheckbox;

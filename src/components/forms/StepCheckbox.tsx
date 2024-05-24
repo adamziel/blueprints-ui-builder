@@ -1,12 +1,15 @@
 import React from "react";
-import { useDispatch } from "../../context/actions";
-import { useAppState } from "../../context/StepsContext";
+import { updateStepAttribute } from "../../context/steps";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../context/store";
 
 const StepCheckbox: React.FC<any> = ({ name, index, ...rest }) => {
-  const { steps } = useAppState();
-  const actions = useDispatch();
+  const steps = useSelector((state: RootState) => state.steps.steps);
+  const dispatch = useDispatch();
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    actions.updateStepAttribute(index, name, e.target.checked);
+    dispatch(
+      updateStepAttribute({ index, key: name, value: e.target.checked }),
+    );
   };
 
   const step = steps[index];

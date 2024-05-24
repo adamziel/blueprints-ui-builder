@@ -1,15 +1,18 @@
-import { useDispatch } from "../context/actions";
-import { useAppState } from "../context/StepsContext";
+import { useDispatch, useSelector } from "react-redux";
 import { StepProps } from "../types";
 import ActivatePluginStep from "./steps/ActivatePluginStep";
 import CpStep from "./steps/CpStep";
 import DefinePHPConstantsStep from "./steps/DefinePHPConstantsStep";
 import InstallPluginStep from "./steps/InstallPluginStep";
 import MvStep from "./steps/MvStep";
+import { AppDispatch, RootState } from "../context/store";
+import { removeStep } from "../context/steps";
 
 const Step: React.FC<StepProps> = (props) => {
-  const { removeStep } = useDispatch();
-  const step = useAppState().steps[props.stepIndex];
+  const dispatch = useDispatch<AppDispatch>();
+  const step = useSelector(
+    (state: RootState) => state.steps.steps[props.stepIndex],
+  );
   const renderStep = function () {
     switch (step.step) {
       case "installPlugin":
@@ -31,7 +34,7 @@ const Step: React.FC<StepProps> = (props) => {
       {renderStep()}
       <button
         className="step-delete"
-        onClick={() => removeStep(props.stepIndex)}
+        onClick={() => dispatch(removeStep(props.stepIndex))}
       >
         {" "}
         X{" "}

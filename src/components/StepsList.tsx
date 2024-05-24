@@ -1,10 +1,17 @@
 import React, { useRef } from "react";
 import DraggableStep from "./DraggableStep";
 import Sidebar from "./Sidebar";
-import { StepsMeta, useAppState, StepSlug } from "../context/StepsContext";
+import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
 import { DragItemTypes } from "../types";
-import { useDispatch } from "../context/actions";
+import { AppDispatch, RootState } from "../context/store";
+import {
+  insertStep,
+  setPlaceholderIndex,
+  StepSlug,
+  StepsMeta,
+  swapSteps,
+} from "../context/steps";
 
 export type DraggedItem = { type: string; index?: number; stepSlug?: StepSlug };
 
@@ -18,24 +25,34 @@ const DragPlaceholder: React.FC<{ visible: boolean }> = ({ visible }) => (
 );
 
 const StepsList: React.FC = () => {
-  const { steps, placeholderIndex } = useAppState();
-  const { setPlaceholderIndex, swapSteps, insertStep } = useDispatch();
+  const { steps, placeholderIndex } = useSelector(
+    (state: RootState) => state.steps,
+  );
+  const dispatch = useDispatch<AppDispatch>();
+
   const ref = useRef<HTMLDivElement>(null);
 
   const [, drop] = useDrop({
     accept: [DragItemTypes.STEP, DragItemTypes.CARD],
-    drop(item: DraggedItem, monitor) {
-      setPlaceholderIndex(null);
+    drop(item: DraggedItem) {
+      dispatch(setPlaceholderIndex(null));
       if (!ref.current || placeholderIndex === null) {
         return;
       }
       if (item.type === DragItemTypes.STEP) {
-        swapSteps(item.index!, placeholderIndex);
+        dispatch(
+          swapSteps({ dragIndex: item.index!, hoverIndex: placeholderIndex }),
+        );
       } else if (item.stepSlug) {
-        insertStep(placeholderIndex, {
-          step: item.stepSlug,
-          ...(StepsMeta[item.stepSlug]?.defaultValues || {}),
-        });
+        dispatch(
+          insertStep({
+            index: placeholderIndex,
+            step: {
+              step: item.stepSlug,
+              ...(StepsMeta[item.stepSlug]?.defaultValues || {}),
+            },
+          }),
+        );
       }
     },
   });
