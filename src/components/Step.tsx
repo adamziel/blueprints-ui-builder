@@ -1,4 +1,5 @@
 import { useDispatch } from "../context/actions";
+import { useAppState } from "../context/StepsContext";
 import { StepProps } from "../types";
 import ActivatePluginStep from "./ActivatePluginStep";
 import CpStep from "./CpStep";
@@ -8,8 +9,9 @@ import MvStep from "./MvStep";
 
 const Step: React.FC<StepProps> = (props) => {
     const { removeStep } = useDispatch();
+    const step = useAppState().steps[props.stepIndex];
     const renderStep = function () {
-        switch (props.step.key) {
+        switch (step.step) {
             case 'installPlugin':
                 return <InstallPluginStep {...props} />;
             case 'activatePlugin':
@@ -21,12 +23,12 @@ const Step: React.FC<StepProps> = (props) => {
             case 'defineWpConfigConstants':
                 return <DefinePHPConstantsStep {...props} />;
             default:
-                throw new Error('No such step ' + props.step.key)
+                throw new Error('No such step ' + step.step)
         }
     }
     return (
         <div className="step-wrapper">
-            <button onClick={() => removeStep(props.index)}>-</button>
+            <button onClick={() => removeStep(props.stepIndex)}>-</button>
             {renderStep()}
         </div>
     )

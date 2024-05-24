@@ -1,6 +1,5 @@
 import { useContext } from "react";
-import { StepData } from "../types";
-import { StepsContext } from "./StepsContext";
+import { StepModel, StepsContext } from "./StepsContext";
 
 export const SET_PLACEHOLDER_INDEX = 'SET_PLACEHOLDER_INDEX';
 export const setPlaceholderIndex = (index: number | null) => ({
@@ -10,14 +9,14 @@ export const setPlaceholderIndex = (index: number | null) => ({
 export type SetPlaceholderTypeAction = ReturnType<typeof setPlaceholderIndex>;
 
 export const ADD_STEP = 'ADD_STEP';
-export const addStep = (step: StepData) => ({
+export const addStep = (step: StepModel) => ({
   type: ADD_STEP,
   payload: step,
 });
 export type AddStepAction = ReturnType<typeof addStep>;
 
 export const INSERT_STEP = 'INSERT_STEP';
-export const insertStep = (index: number, step: StepData) => ({
+export const insertStep = (index: number, step: StepModel) => ({
   type: INSERT_STEP,
   payload: { index, step },
 });

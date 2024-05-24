@@ -1,16 +1,7 @@
-import { ConnectDragPreview } from "react-dnd";
-
 export interface StepProps {
-    index: number;
-    step: StepData;
+    stepIndex: number;
     isDragging: boolean;
-  }
-  
-
-export interface StepData {
-  key: string;
-  [key: string]: any;
-}
+}  
 
 export const DragItemTypes = {
   STEP: 'step',

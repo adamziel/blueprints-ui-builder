@@ -1,58 +1,62 @@
 import React, { createContext, useContext, useReducer } from 'react';
-import { StepData } from '../types';
 import { SET_PLACEHOLDER_INDEX, UPDATE_STEP_ATTRIBUTE, ADD_STEP, INSERT_STEP, MOVE_STEP, REMOVE_STEP, TOGGLE_CHECKBOX } from './actions';
 
-interface StepsState {
-  steps: StepData[];
+export interface StepModel {
+  step: string;
+  [key: string]: any;
+}
+
+interface ApplicationState {
+  steps: StepModel[];
   placeholderIndex: number | null;
 }
 
 interface StepsContextProps {
-  state: StepsState;
+  state: ApplicationState;
   dispatch: React.Dispatch<any>;
 }
 
-export interface StepDefinition {
-  id: string;
-  name: string;
+export interface StepMeta {
+  slug: string;
+  label: string;
   defaultValues?: Record<string, any>
 }
-export const StepDefinitions: Record<string, StepDefinition> = {
+export const StepsMeta: Record<string, StepMeta> = {
   installPlugin: {
-    id: 'installPlugin',
-    name: 'installPlugin',
+    slug: 'installPlugin',
+    label: 'Install Plugin',
     defaultValues: {
       activate: true
     }
   },
   activatePlugin: {
-    id: 'activatePlugin',
-    name: 'activatePlugin',
+    slug: 'activatePlugin',
+    label: 'Activate Plugin',
   },
   mv: {
-    id:'mv',
-    name: 'mv', 
+    slug:'mv',
+    label: 'Move a file or directory', 
   },
   cp: {
-    id:'cp',
-    name: 'cp', 
+    slug:'cp',
+    label: 'Copy a file or directory',
   },
   defineWpConfigConstants: {
-    id: 'defineWpConfigConstants',
-    name: 'defineWpConfigConstants',
+    slug: 'defineWpConfigConstants',
+    label: 'Define a PHP constant',
   },
 } as const
 
-export type StepSlug = keyof StepDefinition;
+export type StepSlug = keyof StepMeta;
 
-export function createStep(slug: string): StepData {
+export function createStep(slug: string): StepModel {
   return {
-    key: slug,
-    ...(StepDefinitions[slug]?.defaultValues || {})
+    step: slug,
+    ...(StepsMeta[slug]?.defaultValues || {})
   }
 }
 
-const initialSteps: StepData[] = [
+const initialSteps: StepModel[] = [
   createStep('installPlugin'),
   createStep('activatePlugin'),
   createStep('mv'),
@@ -60,7 +64,7 @@ const initialSteps: StepData[] = [
   createStep('defineWpConfigConstants'),
 ];
 
-const initialState: StepsState = {
+const initialState: ApplicationState = {
   steps: initialSteps,
   placeholderIndex: null,
 };
@@ -68,7 +72,7 @@ const initialState: StepsState = {
 export const StepsContext = createContext<StepsContextProps | undefined>(undefined);
 
 
-const stepsReducer = (state: StepsState, action: any): StepsState => {
+const stepsReducer = (state: ApplicationState, action: any): ApplicationState => {
   switch (action.type) {
     case SET_PLACEHOLDER_INDEX:
       return { ...state, placeholderIndex: action.payload };

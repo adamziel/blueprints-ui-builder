@@ -2,21 +2,17 @@ import React from 'react';
 import { StepProps } from '../types';
 import StepInputText from './forms/StepInputText';
 import StepCheckbox from './forms/StepCheckbox';
+import { StepsMeta } from '../context/StepsContext';
 
 const ActivatePluginStep: React.FC<StepProps> = ({
-  step,
-  index,
+  stepIndex: index,
 }) => {
   return (
     <div className="step">
-    <h4>Activate Plugin</h4>
+      <h4>{StepsMeta['activatePlugin'].label}</h4>
     <label>
       Path
-      <StepInputText name="pluginZipFile" index={index} />
-    </label>
-    <label>
-      Activate?
-      <StepCheckbox name="activate" index={index} />
+      <StepInputText name="pluginPath" index={index} />
     </label>
     </div>
   );

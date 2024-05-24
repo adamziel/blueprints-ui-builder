@@ -1,15 +1,16 @@
 import React, { useRef } from 'react';
 import { DragPreviewImage, useDrag, useDrop } from 'react-dnd';
-import { DragItemTypes, StepData } from '../types';
+import { DragItemTypes } from '../types';
 
 import Step from './Step';
 import { boxImage } from './boximage';
 import { DraggedItem } from './StepsList';
 import { useDispatch } from '../context/actions';
+import { StepModel } from '../context/StepsContext';
 
 interface DraggableStepProps {
   index: number;
-  step: StepData;
+  step: StepModel;
 }
 
 const DraggableStep: React.FC<DraggableStepProps> = (props) => {
@@ -59,7 +60,7 @@ const DraggableStep: React.FC<DraggableStepProps> = (props) => {
           <div className="step-drag-wrapper" ref={ref} style={{
             opacity: isDragging ? 0 : 1
         }}>
-            <Step step={step} index={index} isDragging={isDragging} />
+            <Step stepIndex={index} isDragging={isDragging} />
         </div>
     </div>
 );

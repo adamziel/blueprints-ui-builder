@@ -1,22 +1,21 @@
 import React from 'react';
 import { StepProps } from '../types';
-import StepCheckbox from './forms/StepCheckbox';
 import StepInputText from './forms/StepInputText';
+import { StepsMeta } from '../context/StepsContext';
 
 const ActivatePluginStep: React.FC<StepProps> = ({
-  step,
-  index,
+  stepIndex: index,
 }) => {
   return (
     <div className="step">
-      <h4>Move files or directories</h4>
+      <h4>{StepsMeta['mv'].label}</h4>
       <label>
-        Path
-        <StepInputText name="pluginZipFile" index={index} />
+        From Path
+        <StepInputText name="fromPath" index={index} />
       </label>
       <label>
-        Activate?
-        <StepCheckbox name="activate" index={index} />
+        To Path
+        <StepInputText name="toPath" index={index} />
       </label>
     </div>
   );

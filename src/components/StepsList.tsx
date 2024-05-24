@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import DraggableStep from './DraggableStep';
 import Sidebar from './Sidebar';
-import { StepDefinitions, useAppState, StepSlug } from '../context/StepsContext';
+import { StepsMeta, useAppState, StepSlug } from '../context/StepsContext';
 import { useDrop } from 'react-dnd';
 import { DragItemTypes } from '../types';
 import { useDispatch } from '../context/actions';
@@ -30,8 +30,8 @@ const StepsList: React.FC = () => {
           swapSteps(item.index!, placeholderIndex)
       } else if(item.stepSlug) {
           insertStep(placeholderIndex, {
-              key: item.stepSlug,
-              ...(StepDefinitions[item.stepSlug]?.defaultValues || {})
+              step: item.stepSlug,
+              ...(StepsMeta[item.stepSlug]?.defaultValues || {})
           });
       }
     },
@@ -44,7 +44,7 @@ const StepsList: React.FC = () => {
           <pre style={{textAlign: 'left'}}>
               {JSON.stringify(steps, null, 4)}
           </pre>
-          <Sidebar availableSteps={Object.values(StepDefinitions)} />
+          <Sidebar availableSteps={Object.values(StepsMeta)} />
       <div className="steps-list" ref={ref}>
         {steps.map((step, index) => (
           <React.Fragment key={index}>

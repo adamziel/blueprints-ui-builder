@@ -1,22 +1,20 @@
 import React from 'react';
 import { StepProps } from '../types';
-import StepCheckbox from './forms/StepCheckbox';
 import StepInputText from './forms/StepInputText';
 
 const ActivatePluginStep: React.FC<StepProps> = ({
-  step,
-  index,
+  stepIndex: index,
 }) => {
   return (
     <div className="step">
-      <h4>Define PHP constants</h4>
+      <h4>Define a PHP constant</h4>
       <label>
-        Path
-        <StepInputText name="pluginZipFile" index={index} />
+        Name
+        <StepInputText name="name" index={index} />
       </label>
       <label>
-        Activate?
-        <StepCheckbox name="activate" index={index} />
+        Value
+        <StepInputText name="value" index={index} />
       </label>
     </div>
   );
