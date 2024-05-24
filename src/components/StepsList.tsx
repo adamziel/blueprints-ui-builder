@@ -8,7 +8,7 @@ import { useDispatch } from "../context/actions";
 
 export type DraggedItem = { type: string; index?: number; stepSlug?: StepSlug };
 
-const Placeholder: React.FC<{ visible: boolean }> = ({ visible }) => (
+const DragPlaceholder: React.FC<{ visible: boolean }> = ({ visible }) => (
   <div
     className="drag-placeholder"
     style={{
@@ -49,14 +49,14 @@ const StepsList: React.FC = () => {
       <div className="steps-list" ref={ref}>
         {steps.map((step, index) => (
           <React.Fragment key={index}>
-            <Placeholder
+            <DragPlaceholder
               visible={placeholderIndex === index}
               key={"placeholder" + index}
             />
             <DraggableStep key={"step" + index} index={index} step={step} />
           </React.Fragment>
         ))}
-        <Placeholder
+        <DragPlaceholder
           visible={placeholderIndex === steps.length}
           key={steps.length}
         />
