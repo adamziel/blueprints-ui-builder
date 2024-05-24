@@ -7,6 +7,10 @@ import InstallPluginStep from "./steps/InstallPluginStep";
 import MvStep from "./steps/MvStep";
 import { AppDispatch, RootState } from "../context/store";
 import { removeStep } from "../context/steps";
+import { Delete } from "@mui/icons-material";
+import { ListItem, ListItemSecondaryAction, IconButton, Box } from "@mui/material";
+import InstallThemeStep from "./steps/InstallThemeStep";
+import ActivateThemeStep from "./steps/ActivateThemeStep";
 
 const Step: React.FC<StepProps> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -15,10 +19,14 @@ const Step: React.FC<StepProps> = (props) => {
   );
   const renderStep = function () {
     switch (step.step) {
+      case "installTheme":
+        return <InstallThemeStep {...props} />;
       case "installPlugin":
         return <InstallPluginStep {...props} />;
       case "activatePlugin":
         return <ActivatePluginStep {...props} />;
+      case "activateTheme":
+        return <ActivateThemeStep {...props} />;
       case "mv":
         return <MvStep {...props} />;
       case "cp":
@@ -30,16 +38,26 @@ const Step: React.FC<StepProps> = (props) => {
     }
   };
   return (
-    <div className="step-wrapper">
-      {renderStep()}
-      <button
-        className="step-delete"
-        onClick={() => dispatch(removeStep(props.stepIndex))}
+    <ListItem divider>
+      <Box
+        display="flex"
+        flexDirection={{ xs: "column", sm: "row" }}
+        sx={{ flexGrow: 1, gap: 2, margin: 0 }}
+        alignItems="center"
+        mb={2}
       >
-        {" "}
-        X{" "}
-      </button>
-    </div>
+        {renderStep()}
+      </Box>
+      <ListItemSecondaryAction>
+        <IconButton
+          edge="end"
+          color="secondary"
+          onClick={() => dispatch(removeStep(props.stepIndex))}
+        >
+          <Delete />
+        </IconButton>
+      </ListItemSecondaryAction>
+    </ListItem>
   );
 };
 

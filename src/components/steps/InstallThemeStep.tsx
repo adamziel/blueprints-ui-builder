@@ -4,18 +4,18 @@ import { updateStepAttribute } from "../../context/steps";
 import { ListItemText, Checkbox, FormControlLabel } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../context/store";
-import WordPressPluginAutocomplete from "../forms/WordPressPluginAutocomplete";
+import WordPressThemeAutocomplete from "../forms/WordPressThemeAutocomplete";
 
-const InstallPluginStep: React.FC<StepProps> = ({ stepIndex: index }) => {
+const InstallThemeStep: React.FC<StepProps> = ({ stepIndex: index }) => {
   const step = useSelector((state: RootState) => state.steps.steps[index]);
   const dispatch = useDispatch();
   return (
     <>
-      <ListItemText sx={{ flexGrow: 0 }} primary={"Install plugin"} />
+      <ListItemText sx={{ flexGrow: 0 }} primary={"Install theme"} />
 
-      <WordPressPluginAutocomplete
+      <WordPressThemeAutocomplete
         stepIndex={index}
-        stepAttribute="pluginZipFile"
+        stepAttribute="themeZipFile"
         sx={{ flexGrow: 1 }}
       />
 
@@ -41,4 +41,4 @@ const InstallPluginStep: React.FC<StepProps> = ({ stepIndex: index }) => {
   );
 };
 
-export default InstallPluginStep;
+export default InstallThemeStep;

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { Fragment, useEffect, useRef } from "react";
 import DraggableStep from "./DraggableStep";
 import Sidebar from "./Sidebar";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,17 +7,27 @@ import { DragItemTypes } from "../types";
 import { AppDispatch, RootState } from "../context/store";
 import {
   insertStep,
-  setPlaceholderIndex,
+  setDropIndex,
   StepSlug,
   StepsMeta,
   swapSteps,
 } from "../context/steps";
+import {
+  List,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton,
+  Box,
+} from "@mui/material";
 
 export type DraggedItem = { type: string; index?: number; stepSlug?: StepSlug };
 
-const DragPlaceholder: React.FC<{ visible: boolean }> = ({ visible }) => (
+const DropPositionIndicator: React.FC<{ visible: boolean }> = ({ visible }) => (
   <div
-    className="drag-placeholder"
+    className="drop-position-indicator"
     style={{
       opacity: visible ? 1 : 0,
     }}
@@ -25,9 +35,7 @@ const DragPlaceholder: React.FC<{ visible: boolean }> = ({ visible }) => (
 );
 
 const StepsList: React.FC = () => {
-  const { steps, placeholderIndex } = useSelector(
-    (state: RootState) => state.steps,
-  );
+  const { steps, dropIndex } = useSelector((state: RootState) => state.steps);
   const dispatch = useDispatch<AppDispatch>();
 
   const ref = useRef<HTMLDivElement>(null);
@@ -35,18 +43,16 @@ const StepsList: React.FC = () => {
   const [, drop] = useDrop({
     accept: [DragItemTypes.STEP, DragItemTypes.CARD],
     drop(item: DraggedItem) {
-      dispatch(setPlaceholderIndex(null));
-      if (!ref.current || placeholderIndex === null) {
+      dispatch(setDropIndex(null));
+      if (!ref.current || dropIndex === null) {
         return;
       }
       if (item.type === DragItemTypes.STEP) {
-        dispatch(
-          swapSteps({ dragIndex: item.index!, hoverIndex: placeholderIndex }),
-        );
+        dispatch(swapSteps({ dragIndex: item.index!, hoverIndex: dropIndex }));
       } else if (item.stepSlug) {
         dispatch(
           insertStep({
-            index: placeholderIndex,
+            index: dropIndex,
             step: {
               step: item.stepSlug,
               ...(StepsMeta[item.stepSlug]?.defaultValues || {}),
@@ -60,25 +66,33 @@ const StepsList: React.FC = () => {
   drop(ref);
 
   return (
-    <div className="steps-container">
-      <pre style={{ textAlign: "left" }}>{JSON.stringify(steps, null, 4)}</pre>
+    <Box
+      display="flex"
+      flexDirection={{ xs: "column", sm: "row" }}
+      sx={{ flexGrow: 1, gap: 2, margin: 0, flexWrap: "wrap" }}
+    >
+      <pre style={{ textAlign: "left", flexBasis: "100%" }}>
+        {JSON.stringify(steps, null, 4)}
+      </pre>
       <Sidebar availableSteps={Object.values(StepsMeta)} />
-      <div className="steps-list" ref={ref}>
-        {steps.map((step, index) => (
-          <React.Fragment key={index}>
-            <DragPlaceholder
-              visible={placeholderIndex === index}
-              key={"placeholder" + index}
-            />
-            <DraggableStep key={"step" + index} index={index} step={step} />
-          </React.Fragment>
-        ))}
-        <DragPlaceholder
-          visible={placeholderIndex === steps.length}
-          key={steps.length}
-        />
+      <div ref={ref}>
+        <List>
+          {steps.map((step, index) => (
+            <Fragment key={"step-" + index}>
+              <DropPositionIndicator
+                visible={dropIndex === index}
+                key={"placeholder" + index}
+              />
+              <DraggableStep index={index} step={step} key={"step-" + index} />
+            </Fragment>
+          ))}
+          <DropPositionIndicator
+            visible={dropIndex === steps.length}
+            key={steps.length}
+          />
+        </List>
       </div>
-    </div>
+    </Box>
   );
 };
 

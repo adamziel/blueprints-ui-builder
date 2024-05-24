@@ -1,29 +1,26 @@
 import React from "react";
 import { StepProps } from "../../types";
 import { updateStepAttribute } from "../../context/steps";
-import {
-  ListItemText,
-  TextField,
-} from "@mui/material";
+import { ListItemText, TextField } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../context/store";
 
-const ActivatePluginStep: React.FC<StepProps> = ({ stepIndex: index }) => {
+const ActivateThemeStep: React.FC<StepProps> = ({ stepIndex: index }) => {
   const step = useSelector((state: RootState) => state.steps.steps[index]);
   const dispatch = useDispatch();
   return (
     <>
-      <ListItemText primary="Activate plugin" />
+      <ListItemText primary="Activate theme" />
 
       <TextField
-        label="Path"
+        label="Theme name"
         variant="outlined"
-        value={step.pluginPath}
+        value={step.themePath}
         onChange={(e) =>
           dispatch(
             updateStepAttribute({
               index,
-              key: "pluginPath",
+              key: "themeName",
               value: e.target.value,
             }),
           )
@@ -35,4 +32,4 @@ const ActivatePluginStep: React.FC<StepProps> = ({ stepIndex: index }) => {
   );
 };
 
-export default ActivatePluginStep;
+export default ActivateThemeStep;

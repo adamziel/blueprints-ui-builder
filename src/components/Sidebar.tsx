@@ -1,6 +1,7 @@
 import React from "react";
 import { useDrag } from "react-dnd";
 import { StepMeta } from "../context/steps";
+import { Box } from "@mui/material";
 
 const ItemTypes = {
   CARD: "card",
@@ -35,13 +36,20 @@ const StepCard: React.FC<StepCardProps> = ({ stepMeta }) => {
   });
 
   return (
-    <div
+    <Box
       ref={drag}
-      className="step-card"
-      style={{ opacity: isDragging ? 0.5 : 1 }}
+      sx={{
+        backgroundColor: "#fff",
+        border: "1px solid #ccc",
+        padding: 1.5, // MUI's spacing system (10px is equivalent to 2 * 8px)
+        marginBottom: 1,
+        cursor: "grab",
+        opacity: isDragging ? 0.5 : 1,
+        borderRadius: 2
+      }}
     >
       {stepMeta.label}
-    </div>
+    </Box>
   );
 };
 

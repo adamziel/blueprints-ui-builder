@@ -8,28 +8,67 @@ export interface StepModel {
 
 interface ApplicationState {
   steps: StepModel[];
-  placeholderIndex: number | null;
+  dropIndex: number | null;
 }
 
-const initialSteps: StepModel[] = [
-  { step: "installPlugin", activate: true },
-  { step: "activatePlugin" },
-  { step: "mv" },
-  { step: "cp" },
-  { step: "defineWpConfigConstants" },
-];
+export interface StepMeta {
+  slug: string;
+  label: string;
+  defaultValues?: Record<string, any>;
+}
+export const StepsMeta: Record<string, StepMeta> = {
+  installPlugin: {
+    slug: "installPlugin",
+    label: "Install Plugin",
+    defaultValues: {
+      activate: true,
+    },
+  },
+  installTheme: {
+    slug: "installTheme",
+    label: "Install Theme",
+    defaultValues: {
+      activate: true,
+    },
+  },
+  activatePlugin: {
+    slug: "activatePlugin",
+    label: "Activate Plugin",
+  },
+  activateTheme: {
+    slug: "activateTheme",
+    label: "Activate Theme",
+  },
+  mv: {
+    slug: "mv",
+    label: "Move a file or directory",
+  },
+  cp: {
+    slug: "cp",
+    label: "Copy a file or directory",
+  },
+  defineWpConfigConstants: {
+    slug: "defineWpConfigConstants",
+    label: "Define a PHP constant",
+  },
+} as const;
+
+const initialSteps: StepModel[] = Object.values(StepsMeta).map((meta) => ({
+  step: meta.slug,
+  ...(meta.defaultValues || {}),
+}));
 
 const initialState: ApplicationState = {
   steps: initialSteps,
-  placeholderIndex: null,
+  dropIndex: null,
 };
 
 const stepsSlice = createSlice({
   name: "steps",
   initialState,
   reducers: {
-    setPlaceholderIndex(state, action: PayloadAction<number | null>) {
-      state.placeholderIndex = action.payload;
+    setDropIndex(state, action: PayloadAction<number | null>) {
+      state.dropIndex = action.payload;
     },
     addStep(state, action: PayloadAction<StepModel>) {
       state.steps.push(action.payload);
@@ -39,7 +78,7 @@ const stepsSlice = createSlice({
       action: PayloadAction<{ index: number; step: StepModel }>,
     ) {
       state.steps.splice(action.payload.index, 0, action.payload.step);
-      state.placeholderIndex = null;
+      state.dropIndex = null;
     },
     removeStep(state, action: PayloadAction<number>) {
       state.steps.splice(action.payload, 1);
@@ -70,7 +109,7 @@ const stepsSlice = createSlice({
 });
 
 export const {
-  setPlaceholderIndex,
+  setDropIndex,
   addStep,
   insertStep,
   removeStep,
@@ -80,37 +119,6 @@ export const {
 } = stepsSlice.actions;
 
 export default stepsSlice.reducer;
-
-export interface StepMeta {
-  slug: string;
-  label: string;
-  defaultValues?: Record<string, any>;
-}
-export const StepsMeta: Record<string, StepMeta> = {
-  installPlugin: {
-    slug: "installPlugin",
-    label: "Install Plugin",
-    defaultValues: {
-      activate: true,
-    },
-  },
-  activatePlugin: {
-    slug: "activatePlugin",
-    label: "Activate Plugin",
-  },
-  mv: {
-    slug: "mv",
-    label: "Move a file or directory",
-  },
-  cp: {
-    slug: "cp",
-    label: "Copy a file or directory",
-  },
-  defineWpConfigConstants: {
-    slug: "defineWpConfigConstants",
-    label: "Define a PHP constant",
-  },
-} as const;
 
 export type StepSlug = keyof StepMeta;
 
