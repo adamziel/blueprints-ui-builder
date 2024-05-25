@@ -4,6 +4,7 @@ import { StepsMeta, updateStepAttribute } from "../../context/steps";
 import { ListItemText, TextField } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../context/store";
+import RequiredOnBlur from "../forms/RequiredOnBlur";
 
 const DefinePHPConstantStep: React.FC<StepProps> = ({ stepIndex: index }) => {
   const step = useSelector((state: RootState) => state.steps.steps[index]);

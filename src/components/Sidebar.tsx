@@ -1,21 +1,19 @@
 import React from "react";
 import { useDrag } from "react-dnd";
-import { StepMeta } from "../context/steps";
 import { Box } from "@mui/material";
+import { StepMeta, StepsMeta } from "../model/steps";
 
 const ItemTypes = {
   CARD: "card",
 };
 
-interface SidebarProps {
-  availableSteps: StepMeta[];
-}
+interface SidebarProps {}
 
-const Sidebar: React.FC<SidebarProps> = ({ availableSteps }) => {
+const Sidebar: React.FC<SidebarProps> = () => {
   return (
     <div className="sidebar">
       <h3>Available Steps</h3>
-      {availableSteps.map((stepMeta, index) => (
+      {Object.values(StepsMeta).map((stepMeta, index) => (
         <StepCard key={index} stepMeta={stepMeta} />
       ))}
     </div>
@@ -45,7 +43,7 @@ const StepCard: React.FC<StepCardProps> = ({ stepMeta }) => {
         marginBottom: 1,
         cursor: "grab",
         opacity: isDragging ? 0.5 : 1,
-        borderRadius: 2
+        borderRadius: 2,
       }}
     >
       {stepMeta.label}

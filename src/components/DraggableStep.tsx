@@ -1,22 +1,18 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { DragPreviewImage, useDrag, useDrop } from "react-dnd";
-import { DragItemTypes } from "../types";
 
-import Step from "./Step";
 import { boxImage } from "./boximage";
-import { DraggedItem } from "./StepsList";
-import { setDropIndex, StepModel } from "../context/steps";
-import { useDispatch } from "react-redux";
+import { DraggedItem, DragItemTypes } from "./StepsList";
 
 interface DraggableStepProps {
   index: number;
-  step: StepModel;
+  setDropIndex: (index: number | null) => void;
+  children: React.ReactNode;
 }
 
 const DraggableStep: React.FC<DraggableStepProps> = (props) => {
-  const { index, step } = props;
+  const { index, setDropIndex, ...rest } = props;
   const ref = useRef<HTMLDivElement>(null);
-  const dispatch = useDispatch();
 
   const [{ isDragging }, drag, preview] = useDrag({
     type: DragItemTypes.STEP,
@@ -33,7 +29,7 @@ const DraggableStep: React.FC<DraggableStepProps> = (props) => {
         return;
       }
       if (item.index === props.index) {
-        dispatch(setDropIndex(null));
+        setDropIndex(null);
         return;
       }
       const hoverBoundingRect = ref.current.getBoundingClientRect();
@@ -44,11 +40,11 @@ const DraggableStep: React.FC<DraggableStepProps> = (props) => {
       const targetIndex = hoverClientY < hoverMiddleY ? index : index + 1;
 
       if (item.index === props.index - 1 && targetIndex === props.index) {
-        dispatch(setDropIndex(null));
+        setDropIndex(null);
         return;
       }
 
-      dispatch(setDropIndex(targetIndex));
+      setDropIndex(targetIndex);
     },
   });
 
@@ -68,7 +64,7 @@ const DraggableStep: React.FC<DraggableStepProps> = (props) => {
           opacity: isDragging ? 0 : 1,
         }}
       >
-        <Step stepIndex={index} isDragging={isDragging} />
+        {props.children}
       </div>
     </div>
   );

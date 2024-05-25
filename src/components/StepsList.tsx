@@ -1,27 +1,11 @@
-import React, { Fragment, useEffect, useRef } from "react";
+import React, { Fragment, useRef, useState } from "react";
 import DraggableStep from "./DraggableStep";
-import Sidebar from "./Sidebar";
-import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
-import { DragItemTypes } from "../types";
-import { AppDispatch, RootState } from "../context/store";
-import {
-  insertStep,
-  setDropIndex,
-  StepSlug,
-  StepsMeta,
-  swapSteps,
-} from "../context/steps";
-import {
-  List,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
-  ListItemSecondaryAction,
-  IconButton,
-  Box,
-} from "@mui/material";
+import { List } from "@mui/material";
+import { FieldArray, FieldArrayRenderProps, useFormikContext } from "formik";
+import { StepSlug, StepsMeta } from "../model/steps";
+import { BlueprintFormState } from "./MainForm";
+import Step from "./Step";
 
 export type DraggedItem = { type: string; index?: number; stepSlug?: StepSlug };
 
@@ -34,66 +18,85 @@ const DropPositionIndicator: React.FC<{ visible: boolean }> = ({ visible }) => (
   />
 );
 
-const StepsList: React.FC = () => {
-  const { steps, dropIndex } = useSelector((state: RootState) => state.steps);
-  const dispatch = useDispatch<AppDispatch>();
+export const DragItemTypes = {
+  STEP: "step",
+  CARD: "card",
+};
+
+const StepsListStructure: React.FC = () => {
+  return (
+    <List>
+      <FieldArray name="steps">
+        {(props) => <StepsList {...props} />}
+      </FieldArray>
+    </List>
+  );
+};
+
+interface StepListProps extends FieldArrayRenderProps {}
+const StepsList: React.FC<StepListProps> = ({
+  push,
+  remove,
+  handleSwap,
+  handlePush,
+}) => {
+  const [dropIndex, setDropIndex] = useState<number | null>(null);
+  const { values, handleChange, handleBlur, touched, errors } =
+    useFormikContext<BlueprintFormState>();
+  const steps = values.steps;
 
   const ref = useRef<HTMLDivElement>(null);
 
   const [, drop] = useDrop({
     accept: [DragItemTypes.STEP, DragItemTypes.CARD],
     drop(item: DraggedItem) {
-      dispatch(setDropIndex(null));
+      setDropIndex(null);
       if (!ref.current || dropIndex === null) {
         return;
       }
       if (item.type === DragItemTypes.STEP) {
-        dispatch(swapSteps({ dragIndex: item.index!, hoverIndex: dropIndex }));
+        handleSwap(item.index!, dropIndex);
       } else if (item.stepSlug) {
-        dispatch(
-          insertStep({
-            index: dropIndex,
-            step: {
-              step: item.stepSlug,
-              ...(StepsMeta[item.stepSlug]?.defaultValues || {}),
-            },
-          }),
-        );
+        handlePush({
+          index: dropIndex,
+          step: {
+            step: item.stepSlug,
+            ...(StepsMeta[item.stepSlug]?.defaultValues || {}),
+          },
+        });
       }
     },
   });
 
   drop(ref);
-
   return (
-    <Box
-      display="flex"
-      flexDirection={{ xs: "column", sm: "row" }}
-      sx={{ flexGrow: 1, gap: 2, margin: 0, flexWrap: "wrap" }}
-    >
-      <pre style={{ textAlign: "left", flexBasis: "100%" }}>
-        {JSON.stringify(steps, null, 4)}
-      </pre>
-      <Sidebar availableSteps={Object.values(StepsMeta)} />
-      <div ref={ref}>
-        <List>
-          {steps.map((step, index) => (
-            <Fragment key={"step-" + index}>
-              <DropPositionIndicator
-                visible={dropIndex === index}
-                key={"placeholder" + index}
-              />
-              <DraggableStep index={index} step={step} key={"step-" + index} />
-            </Fragment>
-          ))}
+    <div ref={ref} style={{ position: "relative" }}>
+      {steps.map((step, index) => (
+        <Fragment key={"step-" + index}>
           <DropPositionIndicator
-            visible={dropIndex === steps.length}
-            key={steps.length}
+            visible={dropIndex === index}
+            key={"placeholder" + index}
           />
-        </List>
-      </div>
-    </Box>
+          <DraggableStep
+            index={index}
+            key={"step-" + index}
+            setDropIndex={setDropIndex}
+          >
+            <Step
+              index={index}
+              remove={() => {
+                remove(index);
+              }}
+            />
+          </DraggableStep>
+        </Fragment>
+      ))}
+      <DropPositionIndicator
+        visible={dropIndex === steps.length}
+        key={steps.length}
+      />
+    </div>
   );
 };
 
-export default StepsList;
+export default StepsListStructure;

@@ -1,14 +1,10 @@
 import React from "react";
-import { StepProps } from "../../types";
-import { updateStepAttribute } from "../../context/steps";
 import { ListItemText, Checkbox, FormControlLabel } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../context/store";
+import { useFormikFieldProps } from "../../use-formik-form-fields-props";
+import { StepProps } from "../Step";
 import WordPressThemeAutocomplete from "../forms/WordPressThemeAutocomplete";
 
-const InstallThemeStep: React.FC<StepProps> = ({ stepIndex: index }) => {
-  const step = useSelector((state: RootState) => state.steps.steps[index]);
-  const dispatch = useDispatch();
+const InstallThemeStep: React.FC<StepProps> = ({ index }) => {
   return (
     <>
       <ListItemText sx={{ flexGrow: 0 }} primary={"Install theme"} />
@@ -22,17 +18,8 @@ const InstallThemeStep: React.FC<StepProps> = ({ stepIndex: index }) => {
       <FormControlLabel
         control={
           <Checkbox
-            checked={step.activate}
-            onChange={(e) =>
-              dispatch(
-                updateStepAttribute({
-                  index,
-                  key: "activate",
-                  value: e.target.checked,
-                }),
-              )
-            }
             inputProps={{ "aria-label": "controlled" }}
+            {...useFormikFieldProps(`steps[${index}].activate`)}
           />
         }
         label="Activate?"

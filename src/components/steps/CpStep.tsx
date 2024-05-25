@@ -1,13 +1,10 @@
 import React from "react";
-import { StepProps } from "../../types";
-import { StepsMeta, updateStepAttribute } from "../../context/steps";
 import { ListItemText, TextField } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../context/store";
+import { StepProps } from "../Step";
+import { StepsMeta } from "../../model/steps";
+import { useFormikFieldProps } from "../../use-formik-form-fields-props";
 
-const CpStep: React.FC<StepProps> = ({ stepIndex: index }) => {
-  const step = useSelector((state: RootState) => state.steps.steps[index]);
-  const dispatch = useDispatch();
+const CpStep: React.FC<StepProps> = ({ index }) => {
   return (
     <>
       <ListItemText primary={StepsMeta["cp"].label} />
@@ -15,33 +12,15 @@ const CpStep: React.FC<StepProps> = ({ stepIndex: index }) => {
       <TextField
         label="From path"
         variant="outlined"
-        value={step.fromPath}
-        onChange={(e) =>
-          dispatch(
-            updateStepAttribute({
-              index,
-              key: "fromPath",
-              value: e.target.value,
-            }),
-          )
-        }
         sx={{ mr: { sm: 2 }, mb: { xs: 2, sm: 0 } }}
+        {...useFormikFieldProps(`steps[${index}].fromPath`)}
       />
 
       <TextField
         label="To path"
         variant="outlined"
-        value={step.toPath}
-        onChange={(e) =>
-          dispatch(
-            updateStepAttribute({
-              index,
-              key: "toPath",
-              value: e.target.value,
-            }),
-          )
-        }
         sx={{ mr: { sm: 2 }, mb: { xs: 2, sm: 0 } }}
+        {...useFormikFieldProps(`steps[${index}].toPath`)}
       />
     </>
   );
