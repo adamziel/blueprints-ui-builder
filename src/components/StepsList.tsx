@@ -1,11 +1,11 @@
 import React, { Fragment, useRef, useState } from "react";
-import DraggableStep from "./DraggableStep";
+import DraggableStep from "./step-helpers/DraggableStep";
 import { useDrop } from "react-dnd";
 import { List } from "@mui/material";
 import { FieldArray, FieldArrayRenderProps, useFormikContext } from "formik";
 import { StepSlug, StepsMeta } from "../model/steps";
 import { BlueprintFormState } from "./MainForm";
-import Step from "./Step";
+import Step from "./step-helpers/Step";
 
 export type DraggedItem = { type: string; index?: number; stepSlug?: StepSlug };
 

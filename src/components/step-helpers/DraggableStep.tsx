@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import { DragPreviewImage, useDrag, useDrop } from "react-dnd";
 
-import { boxImage } from "./boximage";
-import { DraggedItem, DragItemTypes } from "./StepsList";
+import { boxImage } from "../boximage";
+import { DraggedItem, DragItemTypes } from "../StepsList";
 
 interface DraggableStepProps {
   index: number;

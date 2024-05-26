@@ -1,29 +1,29 @@
 import React from "react";
 import { ListItemText, TextField } from "@mui/material";
+import { useFormikFieldProps } from "../../use-formik-form-fields-props";
 import { StepProps } from "../step-helpers/Step";
 import { StepsMeta } from "../../model/steps";
-import { useFormikFieldProps } from "../../use-formik-form-fields-props";
 
-const CpStep: React.FC<StepProps> = ({ index }) => {
+const DefinePHPConstantStep: React.FC<StepProps> = ({ index }) => {
   return (
     <>
-      <ListItemText primary={StepsMeta["cp"].label} />
+      <ListItemText primary={StepsMeta["defineWpConfigConstants"].label} />
 
       <TextField
-        label="From path"
+        label="Name"
         variant="outlined"
         sx={{ mr: { sm: 2 }, mb: { xs: 2, sm: 0 } }}
-        {...useFormikFieldProps(`steps[${index}].fromPath`)}
+        {...useFormikFieldProps(`steps[${index}].name`)}
       />
 
       <TextField
-        label="To path"
+        label="Value"
         variant="outlined"
         sx={{ mr: { sm: 2 }, mb: { xs: 2, sm: 0 } }}
-        {...useFormikFieldProps(`steps[${index}].toPath`)}
+        {...useFormikFieldProps(`steps[${index}].value`)}
       />
     </>
   );
 };
 
-export default CpStep;
+export default DefinePHPConstantStep;

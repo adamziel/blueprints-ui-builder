@@ -2,7 +2,7 @@
 // import CpStep from "./steps/CpStep";
 // import DefinePHPConstantsStep from "./steps/DefinePHPConstantsStep";
 // import InstallPluginStep from "./steps/InstallPluginStep";
-import MvStep from "./steps/MvStep";
+import MvStep from "../steps/MvStep";
 import { Delete } from "@mui/icons-material";
 import {
   ListItem,
@@ -13,9 +13,13 @@ import {
 // import InstallThemeStep from "./steps/InstallThemeStep";
 // import ActivateThemeStep from "./steps/ActivateThemeStep";
 import { useFormikContext } from "formik";
-import { BlueprintFormState } from "./MainForm";
-import CpStep from "./steps/CpStep";
-import InstallThemeStep from "./steps/InstallThemeStep";
+import { BlueprintFormState } from "../MainForm";
+import CpStep from "../steps/CpStep";
+import InstallThemeStep from "../steps/InstallThemeStep";
+import InstallPluginStep from "../steps/InstallPluginStep";
+import ActivatePluginStep from "../steps/ActivatePluginStep";
+import ActivateThemeStep from "../steps/ActivateThemeStep";
+import DefinePHPConstantsStep from "../steps/DefinePHPConstantsStep";
 
 export interface StepProps {
   index: number;
@@ -31,18 +35,18 @@ const Step: React.FC<StepProps> = (props) => {
     switch (step.step) {
       case "installTheme":
         return <InstallThemeStep {...props} />;
-      // case "installPlugin":
-      //   return <InstallPluginStep {...props} />;
-      // case "activatePlugin":
-      //   return <ActivatePluginStep {...props} />;
-      // case "activateTheme":
-      //   return <ActivateThemeStep {...props} />;
+      case "installPlugin":
+        return <InstallPluginStep {...props} />;
+      case "activatePlugin":
+        return <ActivatePluginStep {...props} />;
+      case "activateTheme":
+        return <ActivateThemeStep {...props} />;
       case "mv":
         return <MvStep {...props} />;
       case "cp":
         return <CpStep {...props} />;
-      // case "defineWpConfigConstants":
-      //   return <DefinePHPConstantsStep {...props} />;
+      case "defineWpConfigConstants":
+        return <DefinePHPConstantsStep {...props} />;
       default:
         return null;
         throw new Error("No such step " + step.step);
@@ -60,11 +64,7 @@ const Step: React.FC<StepProps> = (props) => {
         {renderStep()}
       </Box>
       <ListItemSecondaryAction>
-        <IconButton
-          edge="end"
-          color="secondary"
-          onClick={() => props.remove()}
-        >
+        <IconButton edge="end" color="secondary" onClick={() => props.remove()}>
           <Delete />
         </IconButton>
       </ListItemSecondaryAction>

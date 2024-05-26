@@ -4,18 +4,12 @@ import {
   TextField,
   Autocomplete,
   CircularProgress,
-  AutocompleteProps,
-  StyledComponentProps,
-  SxProps,
-  Theme,
   Box,
   Typography,
-  Avatar,
+  TextFieldProps,
+  TextFieldVariants,
 } from "@mui/material";
-import { isValidPluginSlug, isValidUrl } from "../utils";
-import { useDispatch, useSelector } from "react-redux";
 import { useDebounce } from "use-debounce";
-import { useFormikFieldProps } from "../../use-formik-form-fields-props";
 
 export interface ThemeOption {
   name: string;
@@ -55,25 +49,16 @@ function useQueryThemes(inputValue: string) {
   );
 }
 
-interface Props {
-  stepIndex: number;
-  stepAttribute: string;
-  sx?: SxProps<Theme>;
-}
+type Props<Variant extends TextFieldVariants = TextFieldVariants> =
+  TextFieldProps<Variant> & {
+    name: string;
+  };
 
-const WordPressThemeAutocomplete: React.FC<Props> = ({
-  stepIndex,
-  stepAttribute,
-  ...rest
-}) => {
+const WordPressThemeAutocomplete: React.FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const fieldProps = useFormikFieldProps(
-    `steps[${stepIndex}].${stepAttribute}`,
-  );
-
-  const inputValue = fieldProps.value || "";
+  const inputValue = (props.value || "") as string;
   const [debouncedInputValue] = useDebounce(inputValue, 500);
   const { data: options, isFetching } = useQueryThemes(debouncedInputValue);
 
@@ -87,7 +72,7 @@ const WordPressThemeAutocomplete: React.FC<Props> = ({
 
   return (
     <Autocomplete
-      sx={rest.sx}
+      sx={props.sx}
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
@@ -97,12 +82,7 @@ const WordPressThemeAutocomplete: React.FC<Props> = ({
       filterOptions={(x) => x}
       getOptionLabel={getOptionLabel}
       onInputChange={(event, newInputValue) => {
-        fieldProps.onChange({
-          target: {
-            value: newInputValue,
-            name: fieldProps.name,
-          },
-        });
+        props.onChange?.(event as any);
       }}
       onFocus={() => setIsInputFocused(true)}
       onBlur={() => setIsInputFocused(false)}
@@ -117,7 +97,7 @@ const WordPressThemeAutocomplete: React.FC<Props> = ({
       renderInput={(params) => (
         <TextField
           {...params}
-          {...fieldProps}
+          {...props}
           label="Select WordPress Theme or enter URL"
           variant="outlined"
           fullWidth

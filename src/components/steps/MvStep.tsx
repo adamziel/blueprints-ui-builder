@@ -1,6 +1,6 @@
 import React from "react";
 import { ListItemText, TextField } from "@mui/material";
-import { StepProps } from "../Step";
+import { StepProps } from "../step-helpers/Step";
 import { StepsMeta } from "../../model/steps";
 import { useFormikFieldProps } from "../../use-formik-form-fields-props";
 

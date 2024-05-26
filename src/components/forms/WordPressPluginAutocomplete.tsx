@@ -4,16 +4,11 @@ import {
   TextField,
   Autocomplete,
   CircularProgress,
-  AutocompleteProps,
-  StyledComponentProps,
-  SxProps,
-  Theme,
   Box,
+  Typography,
+  TextFieldProps,
+  TextFieldVariants,
 } from "@mui/material";
-import { isValidPluginSlug, isValidUrl } from "../utils";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../context/store";
-import { updateStepAttribute } from "../../context/steps";
 import { useDebounce } from "use-debounce";
 
 export interface PluginOption {
@@ -52,35 +47,19 @@ function useQueryPlugins(inputValue: string) {
   );
 }
 
-interface Props {
-  stepIndex: number;
-  stepAttribute: string;
-  sx?: SxProps<Theme>;
-}
+type Props<Variant extends TextFieldVariants = TextFieldVariants> =
+  TextFieldProps<Variant> & {
+    name: string;
+  };
 
-const WordPressPluginAutocomplete: React.FC<Props> = ({
-  stepIndex,
-  stepAttribute,
-  ...rest
-}) => {
-  const step = useSelector((state: RootState) => state.steps.steps[stepIndex]);
+const WordPressPluginAutocomplete: React.FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const inputValue = step[stepAttribute] || "";
+  const inputValue = (props.value || "") as string;
   const [debouncedInputValue] = useDebounce(inputValue, 500);
   const { data: options, isFetching } = useQueryPlugins(debouncedInputValue);
 
-  const dispatch = useDispatch();
-  const handleInputChange = (event: any, newInputValue: any) => {
-    dispatch(
-      updateStepAttribute({
-        index: stepIndex,
-        key: stepAttribute,
-        value: newInputValue,
-      }),
-    );
-  };
   const getOptionLabel = (option: string | PluginOption) => {
     if (typeof option === "string") {
       return option;
@@ -88,17 +67,10 @@ const WordPressPluginAutocomplete: React.FC<Props> = ({
       return option.slug;
     }
   };
-  const handleValidation = () => {
-    if (isValidUrl(inputValue) || isValidPluginSlug(inputValue)) {
-      return true;
-    }
-    return false;
-  };
 
-  const hasError = !isInputFocused && !handleValidation() && inputValue !== "";
   return (
     <Autocomplete
-      sx={rest.sx}
+      sx={props.sx}
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
@@ -106,26 +78,26 @@ const WordPressPluginAutocomplete: React.FC<Props> = ({
       loading={isFetching}
       freeSolo
       filterOptions={(x) => x}
-      onInputChange={handleInputChange}
       getOptionLabel={getOptionLabel}
-      renderOption={({ key, ...props }: any, option) => (
-        <Box component="li" key={"option-" + option.slug} {...props}>
-          {option.name} ({option.slug})
-        </Box>
-      )}
+      onInputChange={(event, newInputValue) => {
+        props.onChange?.(event as any);
+      }}
+      onFocus={() => setIsInputFocused(true)}
+      onBlur={() => setIsInputFocused(false)}
+      renderOption={({ key, ...props }: any, option) => {
+        if (!options) return null;
+        return (
+          <Box component="li" {...props} key={option.slug}>
+            <Typography>{option.name}</Typography>
+          </Box>
+        );
+      }}
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Select WordPress Plugin or enter URL"
+          {...props}
+          label="Select WordPress Plugin or enter a zip bundle URL"
           variant="outlined"
-          error={hasError}
-          helperText={hasError ? "Enter a valid plugin slug or URL" : ""}
-          onFocus={() => {
-            setIsInputFocused(true);
-          }}
-          onBlur={() => {
-            setIsInputFocused(false);
-          }}
           fullWidth
           InputProps={{
             ...params.InputProps,
@@ -145,3 +117,4 @@ const WordPressPluginAutocomplete: React.FC<Props> = ({
 };
 
 export default WordPressPluginAutocomplete;
+
