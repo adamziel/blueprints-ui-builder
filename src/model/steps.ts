@@ -13,6 +13,30 @@ export interface StepMeta {
 }
 
 export const StepsMeta: Record<string, StepMeta> = {
+  activatePlugin: {
+    slug: "activatePlugin",
+    label: "Activate Plugin",
+  },
+  activateTheme: {
+    slug: "activateTheme",
+    label: "Activate Theme",
+  },
+  cp: {
+    slug: "cp",
+    label: "Copy a file or directory",
+  },
+  defineWpConfigConstants: {
+    slug: "defineWpConfigConstants",
+    label: "Define a PHP constant",
+  },
+  enableMultisite: {
+    slug: "enableMultisite",
+    label: "Enable Multisite",
+  },
+  importWxr: {
+    slug: "importWxr",
+    label: "Import WXR",
+  },
   installPlugin: {
     slug: "installPlugin",
     label: "Install Plugin",
@@ -27,25 +51,49 @@ export const StepsMeta: Record<string, StepMeta> = {
       activate: true,
     },
   },
-  activatePlugin: {
-    slug: "activatePlugin",
-    label: "Activate Plugin",
+  login: {
+    slug: "login",
+    label: "Login",
   },
-  activateTheme: {
-    slug: "activateTheme",
-    label: "Activate Theme",
+  mkDir: {
+    slug: "mkDir",
+    label: "Create a directory",
   },
   mv: {
     slug: "mv",
     label: "Move a file or directory",
   },
-  cp: {
-    slug: "cp",
-    label: "Copy a file or directory",
+  rm: {
+    slug: "rm",
+    label: "Remove a file",
   },
-  defineWpConfigConstants: {
-    slug: "defineWpConfigConstants",
-    label: "Define a PHP constant",
+  rmDir: {
+    slug: "rmDir",
+    label: "Remove a directory",
+  },  
+  runPHP: {
+    slug: "runPHP",
+    label: "Run PHP",
+  },
+  runSql: {
+    slug: "runSql",
+    label: "Run SQL",
+  },
+  setSiteOptions: {
+    slug: "setSiteOptions",
+    label: "Set site options",
+  },
+  unzip: {
+    slug: "unzip",
+    label: "Unzip a file",
+  },
+  ["wp-cli"]: {
+    slug: "wp-cli",
+    label: "Run WP-CLI command",
+  },
+  writeFile: {
+    slug: "writeFile",
+    label: "Write a file",
   },
 } as const;
 

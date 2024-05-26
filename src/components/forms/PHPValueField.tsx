@@ -17,7 +17,7 @@ type Props = {
   textFieldLabel?: string;
 };
 
-const PHPValueField: React.FC<Props> = ({
+const PhpValueField: React.FC<Props> = ({
   name,
   selectLabel = "Data type",
   textFieldLabel = "Value",
@@ -120,4 +120,4 @@ const PHPValueField: React.FC<Props> = ({
   );
 };
 
-export default PHPValueField;
+export default PhpValueField;

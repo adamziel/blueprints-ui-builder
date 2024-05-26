@@ -13,39 +13,52 @@ import InstallThemeStep from "../steps/InstallThemeStep";
 import InstallPluginStep from "../steps/InstallPluginStep";
 import ActivatePluginStep from "../steps/ActivatePluginStep";
 import ActivateThemeStep from "../steps/ActivateThemeStep";
-import DefinePHPConstantsStep from "../steps/DefinePHPConstantsStep";
+import DefinePHPConstantsStep from "../steps/DefinePHPConstantStep";
+import EnableMultisiteStep from "../steps/EnableMultisiteStep";
+import ImportWxrStep from "../steps/ImportWxrStep";
+import LoginStep from "../steps/LoginStep";
+import MkDirStep from "../steps/MkDirStep";
+import RmDirStep from "../steps/RmDirStep";
+import RunPHPStep from "../steps/RunPHPStep";
+import RunSQLStep from "../steps/RunSQLStep";
+import SetSiteOptionStep from "../steps/SetSiteOptionStep";
+import UnzipStep from "../steps/UnzipStep";
+import WpCLIStep from "../steps/WpCLIStep";
+import WriteFileStep from "../steps/WriteFileStep";
+import RmStep from "../steps/RmStep";
 
 export interface StepProps {
   index: number;
   remove: () => void;
 }
 
-const Step: React.FC<StepProps> = (props) => {
-  const { values, handleChange, handleBlur, touched, errors } =
-    useFormikContext<BlueprintFormState>();
-  const step = values.steps[props.index];
+const stepComponents = {
+  activatePlugin: ActivatePluginStep,
+  activateTheme: ActivateThemeStep,
+  cp: CpStep,
+  defineWpConfigConstants: DefinePHPConstantsStep,
+  enableMultisite: EnableMultisiteStep,
+  importWxr: ImportWxrStep,
+  installPlugin: InstallPluginStep,
+  installTheme: InstallThemeStep,
+  login: LoginStep,
+  mkDir: MkDirStep,
+  mv: MvStep,
+  rm: RmStep,
+  rmDir: RmDirStep,
+  runPHP: RunPHPStep,
+  runSql: RunSQLStep,
+  setSiteOptions: SetSiteOptionStep,
+  unzip: UnzipStep,
+  ["wp-cli"]: WpCLIStep,
+  writeFile: WriteFileStep,
+} as any;
 
-  const renderStep = function () {
-    switch (step.step) {
-      case "installTheme":
-        return <InstallThemeStep {...props} />;
-      case "installPlugin":
-        return <InstallPluginStep {...props} />;
-      case "activatePlugin":
-        return <ActivatePluginStep {...props} />;
-      case "activateTheme":
-        return <ActivateThemeStep {...props} />;
-      case "mv":
-        return <MvStep {...props} />;
-      case "cp":
-        return <CpStep {...props} />;
-      case "defineWpConfigConstants":
-        return <DefinePHPConstantsStep {...props} />;
-      default:
-        return null;
-        throw new Error("No such step " + step.step);
-    }
-  };
+const Step: React.FC<StepProps> = (props) => {
+  const { values } = useFormikContext<BlueprintFormState>();
+  const step = values.steps[props.index] as any;
+
+  const StepComponent = stepComponents[step.step];
   return (
     <ListItem divider>
       <Box
@@ -55,7 +68,7 @@ const Step: React.FC<StepProps> = (props) => {
         alignItems="center"
         mb={2}
       >
-        {renderStep()}
+        {StepComponent ? <StepComponent index={props.index} /> : null}
       </Box>
       <ListItemSecondaryAction>
         <IconButton edge="end" color="secondary" onClick={() => props.remove()}>
