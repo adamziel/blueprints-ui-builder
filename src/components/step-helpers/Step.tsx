@@ -1,7 +1,3 @@
-// import ActivatePluginStep from "./steps/ActivatePluginStep";
-// import CpStep from "./steps/CpStep";
-// import DefinePHPConstantsStep from "./steps/DefinePHPConstantsStep";
-// import InstallPluginStep from "./steps/InstallPluginStep";
 import MvStep from "../steps/MvStep";
 import { Delete } from "@mui/icons-material";
 import {
@@ -10,8 +6,6 @@ import {
   IconButton,
   Box,
 } from "@mui/material";
-// import InstallThemeStep from "./steps/InstallThemeStep";
-// import ActivateThemeStep from "./steps/ActivateThemeStep";
 import { useFormikContext } from "formik";
 import { BlueprintFormState } from "../MainForm";
 import CpStep from "../steps/CpStep";

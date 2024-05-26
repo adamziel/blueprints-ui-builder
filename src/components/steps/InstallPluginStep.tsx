@@ -5,7 +5,7 @@ import {
   FormControlLabel,
   StepProps,
 } from "@mui/material";
-import WordPressPluginAutocomplete from "../forms/WordPressPluginAutocomplete";
+import WordPressPluginAutocompleteField from "../forms/WordPressPluginAutocompleteField";
 import { useFormikFieldProps } from "../../use-formik-form-fields-props";
 
 const InstallPluginStep: React.FC<StepProps> = ({ index }) => {
@@ -13,7 +13,7 @@ const InstallPluginStep: React.FC<StepProps> = ({ index }) => {
     <>
       <ListItemText sx={{ flexGrow: 0 }} primary={"Install plugin"} />
 
-      <WordPressPluginAutocomplete
+      <WordPressPluginAutocompleteField
         sx={{ flexGrow: 1 }}
         {...useFormikFieldProps(`steps[${index}].pluginZipFile`)}
       />

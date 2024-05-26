@@ -54,7 +54,7 @@ type Props<Variant extends TextFieldVariants = TextFieldVariants> =
     name: string;
   };
 
-const WordPressThemeAutocomplete: React.FC<Props> = (props) => {
+const WordPressThemeAutocompleteField: React.FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
@@ -118,4 +118,4 @@ const WordPressThemeAutocomplete: React.FC<Props> = (props) => {
   );
 };
 
-export default WordPressThemeAutocomplete;
+export default WordPressThemeAutocompleteField;

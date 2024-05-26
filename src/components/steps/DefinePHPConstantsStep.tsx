@@ -3,6 +3,7 @@ import { ListItemText, TextField } from "@mui/material";
 import { useFormikFieldProps } from "../../use-formik-form-fields-props";
 import { StepProps } from "../step-helpers/Step";
 import { StepsMeta } from "../../model/steps";
+import PHPValueField from "../forms/PHPValueField";
 
 const DefinePHPConstantStep: React.FC<StepProps> = ({ index }) => {
   return (
@@ -16,12 +17,12 @@ const DefinePHPConstantStep: React.FC<StepProps> = ({ index }) => {
         {...useFormikFieldProps(`steps[${index}].name`)}
       />
 
-      <TextField
-        label="Value"
-        variant="outlined"
-        sx={{ mr: { sm: 2 }, mb: { xs: 2, sm: 0 } }}
-        {...useFormikFieldProps(`steps[${index}].value`)}
+      <PHPValueField 
+        name={`steps[${index}].value`}
+        selectLabel="Constant data type"
+        textFieldLabel="Constant value"
       />
+      {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
     </>
   );
 };
