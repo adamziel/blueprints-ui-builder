@@ -1,11 +1,12 @@
 import React from "react";
 import { ListItemText, TextField } from "@mui/material";
-import { useFormikFieldProps } from "../../use-formik-form-fields-props";
+import { useBlueprintFormContext } from "../../use-blueprint-form-context";
 import { StepProps } from "../step-helpers/Step";
 import { StepsMeta } from "../../model/steps";
 import PhpValueField from "../forms/PhpValueField";
 
 const DefinePHPConstantStep: React.FC<StepProps> = ({ index }) => {
+  const { register } = useBlueprintFormContext();
   return (
     <>
       <ListItemText primary={StepsMeta["defineWpConfigConstants"].label} />
@@ -14,7 +15,7 @@ const DefinePHPConstantStep: React.FC<StepProps> = ({ index }) => {
         label="Name"
         variant="outlined"
         sx={{ mr: { sm: 2 }, mb: { xs: 2, sm: 0 } }}
-        {...useFormikFieldProps(`steps[${index}].name`)}
+        {...register(`steps[${index}].name`, { required: true })}
       />
 
       <PhpValueField 

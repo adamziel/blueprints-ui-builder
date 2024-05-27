@@ -6,23 +6,34 @@ import {
   StepProps,
 } from "@mui/material";
 import WordPressPluginAutocompleteField from "../forms/WordPressPluginAutocompleteField";
-import { useFormikFieldProps } from "../../use-formik-form-fields-props";
+import { useBlueprintFormContext } from "../../use-blueprint-form-context";
+import { isValidUrl, isValidPluginSlug } from "../utils";
+
+function isWpOrgSlug(value: string) {
+  if (!isValidUrl(value) && !isValidPluginSlug(value)) {
+    return "Enter a valid theme slug or URL";
+  }
+}
 
 const InstallPluginStep: React.FC<StepProps> = ({ index }) => {
+  const { register } = useBlueprintFormContext();
   return (
     <>
       <ListItemText sx={{ flexGrow: 0 }} primary={"Install plugin"} />
 
       <WordPressPluginAutocompleteField
         sx={{ flexGrow: 1 }}
-        {...useFormikFieldProps(`steps[${index}].pluginZipFile`)}
+        {...register(`steps[${index}].pluginZipFile`, {
+          required: true,
+          validate: isWpOrgSlug,
+        })}
       />
 
       <FormControlLabel
         control={
           <Checkbox
             inputProps={{ "aria-label": "controlled" }}
-            {...useFormikFieldProps(`steps[${index}].activate`)}
+            {...register(`steps[${index}].activate`)}
           />
         }
         label="Activate?"

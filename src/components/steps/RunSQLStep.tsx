@@ -2,9 +2,10 @@ import React from "react";
 import { ListItemText, TextField } from "@mui/material";
 import { StepProps } from "../step-helpers/Step";
 import { StepsMeta } from "../../model/steps";
-import { useFormikFieldProps } from "../../use-formik-form-fields-props";
+import { useBlueprintFormContext } from "../../use-blueprint-form-context";
 
 const RunSQLStep: React.FC<StepProps> = ({ index }) => {
+  const { register } = useBlueprintFormContext();
   return (
     <>
       <ListItemText primary={StepsMeta["runSql"].label} />
@@ -15,7 +16,7 @@ const RunSQLStep: React.FC<StepProps> = ({ index }) => {
         multiline
         rows={4}
         sx={{ mr: { sm: 2 }, mb: { xs: 2, sm: 0 } }}
-        {...useFormikFieldProps(`steps[${index}].sql`)}
+        {...register(`steps[${index}].sql`, { required: true })}
       />
     </>
   );

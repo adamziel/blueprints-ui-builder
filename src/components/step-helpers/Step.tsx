@@ -6,7 +6,6 @@ import {
   IconButton,
   Box,
 } from "@mui/material";
-import { useFormikContext } from "formik";
 import { BlueprintFormState } from "../MainForm";
 import CpStep from "../steps/CpStep";
 import InstallThemeStep from "../steps/InstallThemeStep";
@@ -26,6 +25,7 @@ import UnzipStep from "../steps/UnzipStep";
 import WpCLIStep from "../steps/WpCLIStep";
 import WriteFileStep from "../steps/WriteFileStep";
 import RmStep from "../steps/RmStep";
+import { useFormContext } from "react-hook-form";
 
 export interface StepProps {
   index: number;
@@ -55,8 +55,8 @@ const stepComponents = {
 } as any;
 
 const Step: React.FC<StepProps> = (props) => {
-  const { values } = useFormikContext<BlueprintFormState>();
-  const step = values.steps[props.index] as any;
+  const { getValues } = useFormContext<BlueprintFormState>();
+  const step = getValues().steps[props.index] as any;
 
   const StepComponent = stepComponents[step.step];
   return (

@@ -7,9 +7,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { useFormikFieldProps } from "../../use-formik-form-fields-props";
-import { useFormikContext } from "formik";
-import { BlueprintFormState } from "../MainForm";
+import { useBlueprintFormContext } from "../../use-blueprint-form-context";
 
 type Props = {
   name: string;
@@ -22,10 +20,8 @@ const PhpValueField: React.FC<Props> = ({
   selectLabel = "Data type",
   textFieldLabel = "Value",
 }) => {
-  const { setFieldValue, getFieldMeta } =
-    useFormikContext<BlueprintFormState>();
-  const value = getFieldMeta(name).value;
-  const { onFocus, onBlur, error, helperText } = useFormikFieldProps(name);
+  const { register, getValues, setValue } = useBlueprintFormContext();
+  const value = getValues(name);
 
   const [type, setType] = useState<string>("");
   const [inputValue, setInputValue] = useState<string>("");
@@ -47,7 +43,7 @@ const PhpValueField: React.FC<Props> = ({
   }, [value]);
 
   const handleOnChange = (newValue: any) => {
-    setFieldValue(name, newValue);
+    setValue(name, newValue);
   };
 
   const handleTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -95,11 +91,9 @@ const PhpValueField: React.FC<Props> = ({
         <InputLabel>{selectLabel}</InputLabel>
         <Select
           value={type}
-          onChange={handleTypeChange as any}
           label={selectLabel}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          error={error}
+          {...register(`${name}.type`, { required: true })}
+          onChange={handleTypeChange as any}
         >
           <MenuItem value="string">string</MenuItem>
           <MenuItem value="number">number</MenuItem>
@@ -112,8 +106,9 @@ const PhpValueField: React.FC<Props> = ({
         <TextField
           variant="outlined"
           value={inputValue}
-          onChange={handleInputChange}
           label={textFieldLabel}
+          {...register(`${name}.value`)}
+          onChange={handleInputChange}
         />
       )}
     </Box>

@@ -1,9 +1,10 @@
 import React from "react";
 import { ListItemText, TextField } from "@mui/material";
-import { useFormikFieldProps } from "../../use-formik-form-fields-props";
 import { StepProps } from "../step-helpers/Step";
+import { useBlueprintFormContext } from "../../use-blueprint-form-context";
 
 const ActivateThemeStep: React.FC<StepProps> = ({ index }) => {
+  const { register } = useBlueprintFormContext();
   return (
     <>
       <ListItemText primary="Activate theme" />
@@ -13,7 +14,7 @@ const ActivateThemeStep: React.FC<StepProps> = ({ index }) => {
         variant="outlined"
         sx={{ mr: { sm: 2 }, mb: { xs: 2, sm: 0 } }}
         fullWidth
-        {...useFormikFieldProps(`steps[${index}].themeName`)}
+        {...register(`steps[${index}].themeName`, { required: true })}
       />
     </>
   );

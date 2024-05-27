@@ -2,9 +2,10 @@ import React from "react";
 import { ListItemText, TextField } from "@mui/material";
 import { StepProps } from "../step-helpers/Step";
 import { StepsMeta } from "../../model/steps";
-import { useFormikFieldProps } from "../../use-formik-form-fields-props";
+import { useBlueprintFormContext } from "../../use-blueprint-form-context";
 
 const MkDirStep: React.FC<StepProps> = ({ index }) => {
+  const { register } = useBlueprintFormContext();
   return (
     <>
       <ListItemText primary={StepsMeta["mkDir"].label} />
@@ -13,7 +14,7 @@ const MkDirStep: React.FC<StepProps> = ({ index }) => {
         label="Path"
         variant="outlined"
         sx={{ mr: { sm: 2 }, mb: { xs: 2, sm: 0 } }}
-        {...useFormikFieldProps(`steps[${index}].path`)}
+        {...register(`steps[${index}].path`, { required: true })}
       />
     </>
   );

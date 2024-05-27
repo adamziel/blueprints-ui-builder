@@ -10,6 +10,7 @@ import {
   TextFieldVariants,
 } from "@mui/material";
 import { useDebounce } from "use-debounce";
+import { useBlueprintFormContext } from "../../use-blueprint-form-context";
 
 export interface ThemeOption {
   name: string;
@@ -55,10 +56,13 @@ type Props<Variant extends TextFieldVariants = TextFieldVariants> =
   };
 
 const WordPressThemeAutocompleteField: React.FC<Props> = (props) => {
+  const { getValues } = useBlueprintFormContext();
   const [open, setOpen] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const inputValue = (props.value || "") as string;
+  const [inputValue, setInputValue] = useState<string>(
+    getValues(props.name) || "",
+  );
   const [debouncedInputValue] = useDebounce(inputValue, 500);
   const { data: options, isFetching } = useQueryThemes(debouncedInputValue);
 
@@ -83,6 +87,7 @@ const WordPressThemeAutocompleteField: React.FC<Props> = (props) => {
       getOptionLabel={getOptionLabel}
       onInputChange={(event, newInputValue) => {
         props.onChange?.(event as any);
+        setInputValue(newInputValue);
       }}
       onFocus={() => setIsInputFocused(true)}
       onBlur={() => setIsInputFocused(false)}
