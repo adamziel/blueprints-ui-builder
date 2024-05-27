@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/blueprints-ui-builder/static/css/main.b63c1496.css",
+    "main.js": "/blueprints-ui-builder/static/js/main.7210e02c.js",
+    "static/js/453.d53b740d.chunk.js": "/blueprints-ui-builder/static/js/453.d53b740d.chunk.js",
+    "index.html": "/blueprints-ui-builder/index.html",
+    "main.b63c1496.css.map": "/blueprints-ui-builder/static/css/main.b63c1496.css.map",
+    "main.7210e02c.js.map": "/blueprints-ui-builder/static/js/main.7210e02c.js.map",
+    "453.d53b740d.chunk.js.map": "/blueprints-ui-builder/static/js/453.d53b740d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b63c1496.css",
+    "static/js/main.7210e02c.js"
+  ]
+}
