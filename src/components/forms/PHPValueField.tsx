@@ -23,8 +23,8 @@ const PhpValueField: React.FC<Props> = ({
   const { register, getValues, setValue } = useBlueprintFormContext();
   const value = getValues(name);
 
-  const [type, setType] = useState<string>("");
-  const [inputValue, setInputValue] = useState<string>("");
+  const [type, setType] = useState<string>(value?.type || "string");
+  const [inputValue, setInputValue] = useState<string>(value?.value || "");
 
   useEffect(() => {
     if (typeof value === "string") {
@@ -92,7 +92,11 @@ const PhpValueField: React.FC<Props> = ({
         <Select
           value={type}
           label={selectLabel}
-          {...register(`${name}.type`, { required: true })}
+          {...(register as any)(
+            `${name}.type`,
+            { required: true },
+            { withHelperText: false },
+          )}
           onChange={handleTypeChange as any}
         >
           <MenuItem value="string">string</MenuItem>

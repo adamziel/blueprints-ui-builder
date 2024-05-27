@@ -7,7 +7,7 @@ const ActivatePluginStep: React.FC<StepProps> = ({ index }) => {
   const { register } = useBlueprintFormContext();
   return (
     <>
-      <ListItemText primary="Activate plugin" />
+      <ListItemText sx={{flexGrow:0}} primary="Activate plugin" />
 
       <TextField
         label="Path"

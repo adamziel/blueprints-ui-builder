@@ -10,27 +10,21 @@ export function useBlueprintFormContext(): ReturnType<typeof useFormContext> {
 
   return {
     ...form,
-    register: ((name: string, options: any) => {
+    register: ((name: string, options: any, { withHelperText }: any = {}) => {
       const fieldProps = form.register(name, options);
       const fieldState = form.getFieldState(name);
-      return {
+      const props = {
         ...fieldProps,
-        // onFocus: (e: any) => {
-        //   setIsInputFocused(true);
-        // },
-        // onBlur: (e: any) => {
-        //   setIsInputFocused(false);
-        //   return fieldProps.onBlur(e);
-        // },
-        // error: !isInputFocused && touched && !!error,
-        // helperText: !isInputFocused && touched ? error : "",
         error: !!fieldState.error,
-        helperText: !fieldState.error
+      } as any;
+      if (withHelperText !== false) {
+        props.helperText = !fieldState.error
           ? null
           : fieldState.error?.message ||
             (errorMessages as any)[fieldState.error?.type as any] ||
-            "There was an error",
-      };
+            "There was an error";
+      }
+      return props;
     }) as any,
   };
 }

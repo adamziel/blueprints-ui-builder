@@ -1,7 +1,7 @@
 import React from "react";
 import { useDrag } from "react-dnd";
 import { Box } from "@mui/material";
-import { StepMeta, StepsMeta } from "../model/steps";
+import { StepMeta, StepsMeta } from "../model";
 
 const ItemTypes = {
   CARD: "card",

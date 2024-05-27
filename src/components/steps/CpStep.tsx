@@ -1,14 +1,14 @@
 import React from "react";
 import { ListItemText, TextField } from "@mui/material";
 import { StepProps } from "../step-helpers/Step";
-import { StepsMeta } from "../../model/steps";
+import { StepsMeta } from "../../model";
 import { useBlueprintFormContext } from "../../use-blueprint-form-context";
 
 const CpStep: React.FC<StepProps> = ({ index }) => {
   const { register } = useBlueprintFormContext();
   return (
     <>
-      <ListItemText primary={StepsMeta["cp"].label} />
+      <ListItemText sx={{flexGrow:0}} primary={StepsMeta["cp"].label} />
 
       <TextField
         label="From path"

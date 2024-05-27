@@ -1,23 +1,12 @@
 import React from "react";
-import {
-  ListItemText,
-  Checkbox,
-  FormControlLabel,
-  StepProps,
-} from "@mui/material";
+import { ListItemText, StepProps, Box } from "@mui/material";
 import WordPressPluginAutocompleteField from "../forms/WordPressPluginAutocompleteField";
 import { useBlueprintFormContext } from "../../use-blueprint-form-context";
-import { isValidUrl, isValidPluginSlug } from "../utils";
 import Resource from "../forms/Resource";
-
-function isWpOrgSlug(value: string) {
-  if (!isValidUrl(value) && !isValidPluginSlug(value)) {
-    return "Enter a valid theme slug or URL";
-  }
-}
+import { CheckboxElement } from "react-hook-form-mui";
 
 const InstallPluginStep: React.FC<StepProps> = ({ index }) => {
-  const { register } = useBlueprintFormContext();
+  const { register, control, getValues } = useBlueprintFormContext();
   return (
     <>
       <ListItemText sx={{ flexGrow: 0 }} primary={"Install plugin"} />
@@ -26,28 +15,22 @@ const InstallPluginStep: React.FC<StepProps> = ({ index }) => {
         name={`steps[${index}].pluginZipFile`}
         disableRawData
         additionalTypes={{
-          ".org-directory": (
+          ".org-directory": () => (
             <WordPressPluginAutocompleteField
               sx={{ flexGrow: 1 }}
-              fullWidth
-              {...register(`steps[${index}].pluginZipFile.directory`, {
-                required: true,
-                validate: isWpOrgSlug,
-              })}
+              name={`steps[${index}].pluginZipFile.value.directorySlug` as any}
             />
           ),
         }}
       />
 
-      <FormControlLabel
-        control={
-          <Checkbox
-            inputProps={{ "aria-label": "controlled" }}
-            {...register(`steps[${index}].activate`)}
-          />
-        }
-        label="Activate?"
-      />
+      <Box>
+        <CheckboxElement
+          name={`steps[${index}].activate`}
+          label={"Activate"}
+          control={control}
+        />
+      </Box>
     </>
   );
 };

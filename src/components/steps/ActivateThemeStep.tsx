@@ -7,7 +7,7 @@ const ActivateThemeStep: React.FC<StepProps> = ({ index }) => {
   const { register } = useBlueprintFormContext();
   return (
     <>
-      <ListItemText primary="Activate theme" />
+      <ListItemText sx={{flexGrow:0}} primary="Activate theme" />
 
       <TextField
         label="Theme name"

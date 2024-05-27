@@ -21,10 +21,14 @@ const Resource: React.FC<ResourceProps> = ({
   additionalTypes = {},
   disableRawData = false,
 }) => {
-  const { register, setValue } = useBlueprintFormContext();
+  const { register } = useBlueprintFormContext();
 
   const [type, setType] = useState<string>("URL");
-  const typeField = register(`${name}.type`, { required: true });
+  const typeField = (register as any)(
+    `${name}.type`,
+    { required: true },
+    { withHelperText: false },
+  );
   const handleTypeChange = (event: any) => {
     setType(event.target.value);
     typeField.onChange(event);
@@ -32,30 +36,37 @@ const Resource: React.FC<ResourceProps> = ({
 
   return (
     <>
-      <FormControl component="fieldset" fullWidth>
+      <FormControl component="fieldset" sx={{ minWidth: 150 }}>
         <InputLabel>{selectLabel}</InputLabel>
-        <Select label={selectLabel} {...typeField} onChange={handleTypeChange}>
+        <Select
+          label={selectLabel}
+          {...typeField}
+          defaultValue="URL"
+          onChange={handleTypeChange}
+        >
           <MenuItem value="URL">URL</MenuItem>
           <MenuItem value="VFS">VFS path</MenuItem>
           {!disableRawData && <MenuItem value="raw">Raw data</MenuItem>}
           <MenuItem value="localFile">Local file</MenuItem>
           {Object.keys(additionalTypes).map((key) => (
-            <MenuItem value={key}>{key}</MenuItem>
+            <MenuItem value={key} key={key}>
+              {key}
+            </MenuItem>
           ))}
         </Select>
       </FormControl>
       {type === "URL" && (
         <TextField
-          fullWidth
           label="URL"
+          sx={{ margin: 0 }}
           {...register(`${name}.value.URL`, { required: true })}
           margin="normal"
         />
       )}
       {type === "VFS" && (
         <TextField
-          fullWidth
           label="VFS"
+          sx={{ margin: 0 }}
           {...register(`${name}.value.VFS`, { required: true })}
           margin="normal"
         />
@@ -66,6 +77,7 @@ const Resource: React.FC<ResourceProps> = ({
           variant="outlined"
           multiline
           rows={4}
+          sx={{ margin: 0 }}
           {...register(`${name}.value.raw`, { required: true })}
         />
       )}
@@ -75,10 +87,10 @@ const Resource: React.FC<ResourceProps> = ({
           {...register(`${name}.value.localFile`, {
             required: true,
           })}
-          style={{ marginTop: 16 }}
+          style={{ margin: 0 }}
         />
       )}
-      {type in additionalTypes && additionalTypes[type]}
+      {type in additionalTypes && additionalTypes[type]({ name })}
     </>
   );
 };

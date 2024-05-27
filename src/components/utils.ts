@@ -9,5 +9,5 @@ export const isValidUrl = (string: string) => {
 
 export const isValidPluginSlug = (string: string) => {
   // Define a simple slug validation (WordPress plugin slugs are usually alphanumeric with hyphens)
-  return /^[a-z0-9-]+$/.test(string);
+  return /^[a-z0-9\-]+$/.test(string);
 };

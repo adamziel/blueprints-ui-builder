@@ -11,11 +11,12 @@ import {
 } from "@mui/material";
 import { useDebounce } from "use-debounce";
 import { useBlueprintFormContext } from "../../use-blueprint-form-context";
+import { Controller } from "react-hook-form";
+import { isValidPluginSlug } from "../utils";
 
 export interface ThemeOption {
   name: string;
   slug: string;
-  thumbnail: string;
 }
 
 function decodeHtmlEntities(encodedString: string) {
@@ -55,15 +56,29 @@ type Props<Variant extends TextFieldVariants = TextFieldVariants> =
     name: string;
   };
 
-const WordPressThemeAutocompleteField: React.FC<Props> = (props) => {
-  const { getValues } = useBlueprintFormContext();
-  const [open, setOpen] = useState(false);
-  const [isInputFocused, setIsInputFocused] = useState(false);
+function isWpOrgSlug(value: any) {
+  if (!isValidPluginSlug(normalizeValue(value))) {
+    return "Enter a valid theme slug";
+  }
+}
 
-  const [inputValue, setInputValue] = useState<string>(
-    getValues(props.name) || "",
+function normalizeValue(value: string | ThemeOption | null | undefined) {
+  if (!value) {
+    return "";
+  }
+  if (typeof value === "string") {
+    return value;
+  }
+  return value.slug;
+}
+const WordPressThemeAutocompleteField: React.FC<Props> = (props) => {
+  const { getValues, control } = useBlueprintFormContext();
+
+  const [inputValue, setInputValue] = useState(
+    normalizeValue(getValues(props.name) as string),
   );
-  const [debouncedInputValue] = useDebounce(inputValue, 500);
+  const value = inputValue;
+  const [debouncedInputValue] = useDebounce(value, 500);
   const { data: options, isFetching } = useQueryThemes(debouncedInputValue);
 
   const getOptionLabel = (option: string | ThemeOption) => {
@@ -75,47 +90,61 @@ const WordPressThemeAutocompleteField: React.FC<Props> = (props) => {
   };
 
   return (
-    <Autocomplete
-      sx={props.sx}
-      open={open}
-      onOpen={() => setOpen(true)}
-      onClose={() => setOpen(false)}
-      options={options || []}
-      loading={isFetching}
-      freeSolo
-      filterOptions={(x) => x}
-      getOptionLabel={getOptionLabel}
-      onInputChange={(event, newInputValue) => {
-        props.onChange?.(event as any);
-        setInputValue(newInputValue);
-      }}
-      onFocus={() => setIsInputFocused(true)}
-      onBlur={() => setIsInputFocused(false)}
-      renderOption={({ key, ...props }: any, option) => {
-        if (!options) return null;
-        return (
-          <Box component="li" {...props} key={option.slug}>
-            <Typography>{option.name}</Typography>
-          </Box>
-        );
-      }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          {...props}
-          label="Select WordPress Theme or enter URL"
-          variant="outlined"
+    <Controller
+      control={control}
+      rules={{ required: true, validate: isWpOrgSlug }}
+      name={props.name}
+      render={({
+        field: { onChange, onBlur, value, ref },
+        fieldState: { error },
+      }) => (
+        <Autocomplete
+          onBlur={onBlur}
+          onChange={(e, v) => {
+            onChange(v);
+            setInputValue(normalizeValue(v));
+          }}
+          value={value || {slug: "", label: ""}}
+          inputValue={normalizeValue(value)}
+          onInputChange={(e, v) => {
+            onChange(v);
+            setInputValue(normalizeValue(v));
+          }}
+          isOptionEqualToValue={(option, value) =>
+            normalizeValue(option) === normalizeValue(value)
+          }
+          getOptionLabel={getOptionLabel}
+          autoSelect
           fullWidth
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <>
-                {isInputFocused && isFetching ? (
-                  <CircularProgress color="inherit" size={20} />
-                ) : null}
-                {params.InputProps.endAdornment}
-              </>
-            ),
+          options={options || []}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Theme slug in the WordPress.org directory"
+              fullWidth
+              ref={ref}
+              error={!!error}
+              helperText={error && error.message}
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <>
+                    {isFetching ? (
+                      <CircularProgress color="inherit" size={20} />
+                    ) : null}
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
+              }}
+            />
+          )}
+          loading={isFetching}
+          renderOption={({ key, ...props }: any, option: any) => {
+            return (
+              <Box component="li" {...props} key={option.slug}>
+                <Typography>{option.name}</Typography>
+              </Box>
+            );
           }}
         />
       )}

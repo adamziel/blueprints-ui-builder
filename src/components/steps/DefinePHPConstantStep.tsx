@@ -2,14 +2,14 @@ import React from "react";
 import { ListItemText, TextField } from "@mui/material";
 import { useBlueprintFormContext } from "../../use-blueprint-form-context";
 import { StepProps } from "../step-helpers/Step";
-import { StepsMeta } from "../../model/steps";
+import { StepsMeta } from "../../model";
 import PhpValueField from "../forms/PhpValueField";
 
 const DefinePHPConstantStep: React.FC<StepProps> = ({ index }) => {
   const { register } = useBlueprintFormContext();
   return (
     <>
-      <ListItemText primary={StepsMeta["defineWpConfigConstants"].label} />
+      <ListItemText sx={{flexGrow:0}} primary={StepsMeta["defineWpConfigConstants"].label} />
 
       <TextField
         label="Name"

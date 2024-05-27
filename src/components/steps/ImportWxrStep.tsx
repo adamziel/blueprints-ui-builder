@@ -1,22 +1,19 @@
 import React from "react";
-import { ListItemText, TextField } from "@mui/material";
+import { ListItemText } from "@mui/material";
 import { StepProps } from "../step-helpers/Step";
-import { StepsMeta } from "../../model/steps";
-import { useBlueprintFormContext } from "../../use-blueprint-form-context";
+import { StepsMeta } from "../../model";
 import Resource from "../forms/Resource";
 
 const ImportWxrStep: React.FC<StepProps> = ({ index }) => {
-  const { register } = useBlueprintFormContext();
   return (
     <>
-      <ListItemText primary={StepsMeta["importWxr"].label} />
+      <ListItemText sx={{flexGrow:0}} primary={StepsMeta["importWxr"].label} />
 
       <Resource
         name={`steps[${index}].file`}
         selectLabel="WXR file Source"
         disableRawData
-      />
-    
+      />    
     </>
   );
 };

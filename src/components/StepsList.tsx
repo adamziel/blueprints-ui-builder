@@ -2,7 +2,7 @@ import React, { Fragment, useRef, useState } from "react";
 import DraggableStep from "./step-helpers/DraggableStep";
 import { useDrop } from "react-dnd";
 import { List } from "@mui/material";
-import { createStep, StepSlug } from "../model/steps";
+import { createStep, StepSlug } from "../model";
 import Step from "./step-helpers/Step";
 import { useFieldArray, useForm, useFormContext } from "react-hook-form";
 
@@ -23,7 +23,7 @@ export const DragItemTypes = {
 };
 
 const StepsList: React.FC = () => {
-  const { control, getValues } = useFormContext();
+  const { control, getValues, formState } = useFormContext();
   const { fields, remove, swap, insert } = useFieldArray({
     control, // control props comes from useForm (optional: if you are using FormProvider)
     name: "steps", // unique name for your Field Array
@@ -52,34 +52,32 @@ const StepsList: React.FC = () => {
   drop(ref);
 
   return (
-    <div ref={ref} style={{ position: "relative" }}>
-      <List>
-        {fields.map((field: any, index) => (
-          <Fragment key={"step-" + index}>
-            <DropPositionIndicator
-              visible={dropIndex === index}
-              key={"placeholder" + index}
-            />
-            <DraggableStep
+    <List sx={{ position: "relative", width: '100%' }}>
+      {fields.map((field: any, index) => (
+        <Fragment key={"step-" + index}>
+          <DropPositionIndicator
+            visible={dropIndex === index}
+            key={"placeholder" + index}
+          />
+          <DraggableStep
+            index={index}
+            key={"step-" + index}
+            setDropIndex={setDropIndex}
+          >
+            <Step
               index={index}
-              key={"step-" + index}
-              setDropIndex={setDropIndex}
-            >
-              <Step
-                index={index}
-                remove={() => {
-                  remove(index);
-                }}
-              />
-            </DraggableStep>
-          </Fragment>
-        ))}
-        <DropPositionIndicator
-          visible={dropIndex === steps.length}
-          key={steps.length}
-        />
-      </List>
-    </div>
+              remove={() => {
+                remove(index);
+              }}
+            />
+          </DraggableStep>
+        </Fragment>
+      ))}
+      <DropPositionIndicator
+        visible={dropIndex === steps.length}
+        key={steps.length}
+      />
+    </List>
   );
 };
 

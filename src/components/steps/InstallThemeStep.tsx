@@ -1,19 +1,13 @@
 import React from "react";
-import { ListItemText, Checkbox, FormControlLabel } from "@mui/material";
+import { ListItemText, Box } from "@mui/material";
 import { useBlueprintFormContext } from "../../use-blueprint-form-context";
 import { StepProps } from "../step-helpers/Step";
 import WordPressThemeAutocompleteField from "../forms/WordPressThemeAutocompleteField";
-import { isValidUrl, isValidPluginSlug } from "../utils";
 import Resource from "../forms/Resource";
-
-function isWpOrgSlug(value: string) {
-  if (!isValidUrl(value) && !isValidPluginSlug(value)) {
-    return "Enter a valid theme slug or URL";
-  }
-}
+import { CheckboxElement } from "react-hook-form-mui";
 
 const InstallThemeStep: React.FC<StepProps> = ({ index }) => {
-  const { register } = useBlueprintFormContext();
+  const { control, getValues } = useBlueprintFormContext();
   return (
     <>
       <ListItemText sx={{ flexGrow: 0 }} primary={"Install theme"} />
@@ -22,28 +16,23 @@ const InstallThemeStep: React.FC<StepProps> = ({ index }) => {
         name={`steps[${index}].themeZipFile`}
         disableRawData
         additionalTypes={{
-          ".org-directory": (
+          ".org-directory": () => (
             <WordPressThemeAutocompleteField
               sx={{ flexGrow: 1 }}
-              fullWidth
-              {...register(`steps[${index}].themeZipFile.directory`, {
-                required: true,
-                validate: isWpOrgSlug,
-              })}
+              name={`steps[${index}].themeZipFile.value.directorySlug` as any}
             />
           ),
         }}
       />
 
-      <FormControlLabel
-        control={
-          <Checkbox
-            inputProps={{ "aria-label": "controlled" }}
-            {...register(`steps[${index}].activate`)}
-          />
-        }
-        label="Activate?"
-      />
+      <Box>
+        <CheckboxElement
+          name={`steps[${index}].activate`}
+          label="Activate"
+          control={control}
+          checked={getValues(`steps[${index}].activate`) || false}
+        />
+      </Box>
     </>
   );
 };
