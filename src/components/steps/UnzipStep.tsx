@@ -3,6 +3,7 @@ import { ListItemText, TextField } from "@mui/material";
 import { StepProps } from "../step-helpers/Step";
 import { StepsMeta } from "../../model/steps";
 import { useBlueprintFormContext } from "../../use-blueprint-form-context";
+import Resource from "../forms/Resource";
 
 const UnzipStep: React.FC<StepProps> = ({ index }) => {
   const { register } = useBlueprintFormContext();
@@ -10,12 +11,12 @@ const UnzipStep: React.FC<StepProps> = ({ index }) => {
     <>
       <ListItemText primary={StepsMeta["unzip"].label} />
 
-      <TextField
-        label="ZIP path in VFS"
-        variant="outlined"
-        sx={{ mr: { sm: 2 }, mb: { xs: 2, sm: 0 } }}
-        {...register(`steps[${index}].zipFile`, { required: true })}
+      <Resource
+        selectLabel="ZIP file source"
+        name={`steps[${index}].zipFile`}
+        disableRawData
       />
+
       <TextField
         label="Extract to path"
         variant="outlined"
@@ -24,6 +25,6 @@ const UnzipStep: React.FC<StepProps> = ({ index }) => {
       />
     </>
   );
-}
+};
 
 export default UnzipStep;

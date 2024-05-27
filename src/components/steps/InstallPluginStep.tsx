@@ -8,6 +8,7 @@ import {
 import WordPressPluginAutocompleteField from "../forms/WordPressPluginAutocompleteField";
 import { useBlueprintFormContext } from "../../use-blueprint-form-context";
 import { isValidUrl, isValidPluginSlug } from "../utils";
+import Resource from "../forms/Resource";
 
 function isWpOrgSlug(value: string) {
   if (!isValidUrl(value) && !isValidPluginSlug(value)) {
@@ -21,12 +22,21 @@ const InstallPluginStep: React.FC<StepProps> = ({ index }) => {
     <>
       <ListItemText sx={{ flexGrow: 0 }} primary={"Install plugin"} />
 
-      <WordPressPluginAutocompleteField
-        sx={{ flexGrow: 1 }}
-        {...register(`steps[${index}].pluginZipFile`, {
-          required: true,
-          validate: isWpOrgSlug,
-        })}
+      <Resource
+        name={`steps[${index}].pluginZipFile`}
+        disableRawData
+        additionalTypes={{
+          ".org-directory": (
+            <WordPressPluginAutocompleteField
+              sx={{ flexGrow: 1 }}
+              fullWidth
+              {...register(`steps[${index}].pluginZipFile.directory`, {
+                required: true,
+                validate: isWpOrgSlug,
+              })}
+            />
+          ),
+        }}
       />
 
       <FormControlLabel

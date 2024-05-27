@@ -3,6 +3,7 @@ import { ListItemText, TextField } from "@mui/material";
 import { StepProps } from "../step-helpers/Step";
 import { StepsMeta } from "../../model/steps";
 import { useBlueprintFormContext } from "../../use-blueprint-form-context";
+import Resource from "../forms/Resource";
 
 const WriteFileStep: React.FC<StepProps> = ({ index }) => {
   const { register } = useBlueprintFormContext();
@@ -17,14 +18,7 @@ const WriteFileStep: React.FC<StepProps> = ({ index }) => {
         {...register(`steps[${index}].path`, { required: true })}
       />
       
-      <TextField
-        label="Contents"
-        variant="outlined"
-        multiline
-        rows={4}
-        sx={{ mr: { sm: 2 }, mb: { xs: 2, sm: 0 } }}
-        {...register(`steps[${index}].data`, { required: true })}
-      />
+      <Resource name={`steps[${index}].data`} />
     </>
   );
 };

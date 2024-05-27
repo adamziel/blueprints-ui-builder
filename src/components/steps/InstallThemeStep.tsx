@@ -4,6 +4,7 @@ import { useBlueprintFormContext } from "../../use-blueprint-form-context";
 import { StepProps } from "../step-helpers/Step";
 import WordPressThemeAutocompleteField from "../forms/WordPressThemeAutocompleteField";
 import { isValidUrl, isValidPluginSlug } from "../utils";
+import Resource from "../forms/Resource";
 
 function isWpOrgSlug(value: string) {
   if (!isValidUrl(value) && !isValidPluginSlug(value)) {
@@ -17,12 +18,21 @@ const InstallThemeStep: React.FC<StepProps> = ({ index }) => {
     <>
       <ListItemText sx={{ flexGrow: 0 }} primary={"Install theme"} />
 
-      <WordPressThemeAutocompleteField
-        sx={{ flexGrow: 1 }}
-        {...register(`steps[${index}].themeZipFile`, {
-          required: true,
-          validate: isWpOrgSlug,
-        })}
+      <Resource
+        name={`steps[${index}].themeZipFile`}
+        disableRawData
+        additionalTypes={{
+          ".org-directory": (
+            <WordPressThemeAutocompleteField
+              sx={{ flexGrow: 1 }}
+              fullWidth
+              {...register(`steps[${index}].themeZipFile.directory`, {
+                required: true,
+                validate: isWpOrgSlug,
+              })}
+            />
+          ),
+        }}
       />
 
       <FormControlLabel
